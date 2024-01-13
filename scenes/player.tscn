@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://8w6hx7nqtejb"]
+[gd_scene load_steps=20 format=3 uid="uid://8w6hx7nqtejb"]
 
 [ext_resource type="Script" path="res://scenes/move.cs" id="1_8apwr"]
 [ext_resource type="Texture2D" uid="uid://cjvokklpmimge" path="res://assets/sprites/characters/player.png" id="2_jcsvr"]
 [ext_resource type="Script" path="res://scenes/attackHitbox.cs" id="3_g2ciu"]
+[ext_resource type="PackedScene" uid="uid://bxs24t0u33pbr" path="res://scenes/boolet.tscn" id="4_7ed2p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6pph"]
 size = Vector2(13, 19)
@@ -16,6 +17,18 @@ tracks/0/path = NodePath(".:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../boolet:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -182,12 +195,30 @@ tracks/0/keys = {
 "values": [30, 31, 32, 33, 34, 35]
 }
 
+[sub_resource type="Animation" id="Animation_n4ltk"]
+resource_name = "boolet"
+length = 0.45
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../boolet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 1, 0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7rtnb"]
 _data = {
 "RESET": SubResource("Animation_t7mc7"),
 "atk_down": SubResource("Animation_fuknk"),
 "atk_right": SubResource("Animation_qv8u7"),
 "atk_up": SubResource("Animation_5itfw"),
+"boolet": SubResource("Animation_n4ltk"),
 "death": SubResource("Animation_fa728"),
 "idle": SubResource("Animation_dorbw"),
 "idle_right": SubResource("Animation_5htsi"),
@@ -231,12 +262,23 @@ libraries = {
 "": SubResource("AnimationLibrary_7rtnb")
 }
 
+[node name="booletanim" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_7rtnb")
+}
+
 [node name="AttackHitbox" type="Area2D" parent="."]
 script = ExtResource("3_g2ciu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
-position = Vector2(8, 11.5)
+position = Vector2(0, 8.5)
 rotation = 1.5708
+scale = Vector2(1.56843, 1.95909)
 shape = SubResource("CircleShape2D_cehgb")
+
+[node name="boolet" parent="." instance=ExtResource("4_7ed2p")]
+position = Vector2(0, 8)
+frame = 0
 
 [connection signal="body_entered" from="AttackHitbox" to="AttackHitbox" method="_on_body_entered"]

@@ -14,8 +14,6 @@ public partial class attackHitbox : Area2D
 
     public override void _Process(double delta)
     {
-		Position = player.Position;
-        // Check if the player is attacking
         if (move.IsAttacking())
         {            
             Show();
