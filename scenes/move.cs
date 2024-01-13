@@ -1,24 +1,34 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class move : CharacterBody2D
 {
 	public const float Speed = 400.0f;
-	private bool isAttacking = false;
+	private static bool isAttacking;
 
+    public static bool IsAttacking()
+    {
+        return isAttacking;
+    }
+
+	// Method to set the attacking state
+	public void SetAttacking(bool attacking)
+	{
+		isAttacking = attacking;
+	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
+
 	public override void _Process(double delta)
 	{
 		UpdateAnimation();
 		Vector2 velocity = Velocity;
 		Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
 		float direction = Input.GetAxis("left", "right");
 		if (direction != 0)
 		{
@@ -39,29 +49,32 @@ public partial class move : CharacterBody2D
 			velocity.Y = Mathf.MoveToward(velocity.Y, 0, 20);
 		}
 
-
 		Velocity = velocity;
 		MoveAndSlide();
+
 		// Check for attack command
 		if (Input.IsActionPressed("attack") && !isAttacking)
 		{
 			isAttacking = true;
 			Attack();
 		}
+
 		// Flip the sprite based on the direction.
 		bool isLeft = velocity.X < 0;
 		sprite2d.FlipH = isLeft;
 	}
+
 	private void UpdateAnimation()
 	{
-		AnimationPlayer charanimations = this.GetNode<AnimationPlayer>("charanim");
+		AnimationPlayer charAnimations = this.GetNode<AnimationPlayer>("moveanim");
+
 		if (Velocity.Length() > 0)
 		{
-			charanimations.Play("walk_" + GetDirectionName(Velocity));
+			charAnimations.Play("walk_" + GetDirectionName(Velocity));
 		}
 		else
 		{
-			charanimations.Play("idle");
+			charAnimations.Play("idle");
 		}
 	}
 
@@ -86,13 +99,29 @@ public partial class move : CharacterBody2D
 			return "right";
 		}
 	}
+
 	private async void Attack()
 	{
-		AnimationPlayer charanimations = this.GetNode<AnimationPlayer>("charanim");
-		charanimations.Play("atk_" + GetDirectionName(Velocity));
-		await ToSignal(charanimations, "animation_finished");
-		isAttacking = false;
-		charanimations.Play("idle");
-	}
-}
+		AnimationPlayer attackAnimationPlayer = this.GetNode<AnimationPlayer>("atkanim");
 
+		if (!attackAnimationPlayer.IsPlaying())
+		{
+			// Play the attack animation
+			attackAnimationPlayer.Play("atk_" + GetDirectionName(Velocity));
+			await ToSignal(attackAnimationPlayer, "animation_finished");
+
+			// Adjust the hitbox based on the animation frame or direction
+
+			// Wait for a short delay before allowing another attack
+			await Task.Delay(500);
+
+			isAttacking = false;
+		}
+	}
+
+	public static implicit operator bool(move v)
+	{
+		throw new NotImplementedException();
+	}
+
+}
