@@ -4,13 +4,15 @@ using System.Runtime.Serialization;
 
 public partial class enemy : CharacterBody2D
 {
-	
-	CharacterBody2D player;
-	float speed = 25.0f; // Adjust the speed as needed
-	float distanceThreshold = 200.0f; // Adjust the distance threshold
+	private AnimationPlayer enemyanimations;
+	private CharacterBody2D player;
+	private float speed = 25.0f; // Adjust the speed as needed
+	private float distanceThreshold = 200.0f; // Adjust the distance threshold
+	private static Boolean isPlayerDead = false; // State variable to track player's life status
 
 	public override void _Ready()
 	{
+		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
 		player = GetParent().GetNode<CharacterBody2D>("player");
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
@@ -18,42 +20,50 @@ public partial class enemy : CharacterBody2D
 		hitbox.AreaExited += HandleAreaExited;
 	}
 
-    public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
+		bool playerdead = isPlayerDead;
 		UpdateAnimation();
-		Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
+		if (!playerdead)
+		{
+			Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 
-		// Calculate the direction from the enemy to the player
-		Vector2 direction = (player.Position - Position).Normalized();
+			// Calculate the direction from the enemy to the player
+			Vector2 direction = (player.Position - Position).Normalized();
+			KinematicCollision2D collision = MoveAndCollide(direction * speed * (float)delta);
+			// Move the enemy towards the player
+			Position += direction * speed * (float)delta;
 
-		// Move the enemy towards the player
-		Position += direction * speed * (float)delta;
-
-		// Update the facing direction based on the angle
-		UpdateFacingDirection(direction);
+			// Update the facing direction based on the angle
+			UpdateFacingDirection(direction);
+		}
 	}
 
 	private void UpdateAnimation()
 	{
-		AnimationPlayer enemyanimations = GetNode<AnimationPlayer>("enemyanim");
-
 		// Calculate the distance between the enemy and the player
 		float distanceToPlayer = Position.DistanceTo(player.Position);
-
-		if (distanceToPlayer > distanceThreshold)
+		if (isPlayerDead)
 		{
-			enemyanimations.Play("moving");
-			speed = 40f;
+			enemyanimations.Play("idle");
 		}
-		if (distanceToPlayer < distanceThreshold)
+		else
 		{
-			enemyanimations.Play("move");
-			speed = 25f;
-		}
-		if (distanceToPlayer < 50f)
-		{
-			enemyanimations.Play("move");
-			speed = 20f;
+			if (distanceToPlayer > distanceThreshold)
+			{
+				enemyanimations.Play("moving");
+				speed = 40f;
+			}
+			if (distanceToPlayer < distanceThreshold)
+			{
+				enemyanimations.Play("move");
+				speed = 25f;
+			}
+			if (distanceToPlayer < 50f)
+			{
+				enemyanimations.Play("move");
+				speed = 20f;
+			}
 		}
 	}
 
@@ -76,6 +86,7 @@ public partial class enemy : CharacterBody2D
 			sprite2d.FlipH = true;
 		}
 	}
+
 	private int areaEnteredResult = 0;
 
 	void HandleAreaEntered(Area2D otherArea)
@@ -85,24 +96,28 @@ public partial class enemy : CharacterBody2D
 		{
 			GD.Print("CharacterBody2D Entered: " + characterBody2D.Name);
 			// Store the result in the class variable
-			areaEnteredResult = 1; 
+			areaEnteredResult = 1;
 		}
 	}
 
 	private void HandleAreaExited(Area2D area)
-    {
-        if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
+	{
+		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			GD.Print("CharacterBody2D Entered: " + characterBody2D.Name);
 			// Store the result in the class variable
-			areaEnteredResult = 0; 
+			areaEnteredResult = 0;
 		}
-    }
+	}
 
 	public int GetAreaEnteredResult()
 	{
 		return areaEnteredResult;
 	}
 
-}
+	internal static void PlayerisDead()
+	{
+		isPlayerDead = true;
+	}
 
+}

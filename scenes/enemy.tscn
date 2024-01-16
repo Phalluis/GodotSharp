@@ -6,8 +6,8 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7rqmi"]
 blend_mode = 1
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hhah2"]
-radius = 7.5
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_70bi6"]
+size = Vector2(16, 11.5)
 
 [sub_resource type="Animation" id="Animation_jf0qx"]
 resource_name = "death"
@@ -133,7 +133,8 @@ frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 material = SubResource("CanvasItemMaterial_7rqmi")
-shape = SubResource("CircleShape2D_hhah2")
+position = Vector2(-0.5, 1.25)
+shape = SubResource("RectangleShape2D_70bi6")
 one_way_collision_margin = 0.0
 
 [node name="enemyanim" type="AnimationPlayer" parent="."]
