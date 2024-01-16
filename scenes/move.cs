@@ -2,12 +2,13 @@ using Godot;
 using System;
 
 public partial class Move : CharacterBody2D
-{	
+{
 	private Sprite2D sprite2d;
 	private ProgressBar hpbar;
 	private static Boolean death = false;
 	private AnimationPlayer charAnimations;
 	public const float Speed = 400.0f;
+	private enemy enemyScene;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

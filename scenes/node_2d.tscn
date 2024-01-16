@@ -635,4 +635,10 @@ layer_0/tile_data = PackedInt32Array(0, 3, 0, 65536, 3, 0, 131072, 3, 0, 196608,
 
 [node name="enemy" parent="." instance=ExtResource("12_nt1ne")]
 
+[node name="enemy2" parent="." instance=ExtResource("12_nt1ne")]
+position = Vector2(1143.25, 575.675)
+
+[node name="enemy3" parent="." instance=ExtResource("12_nt1ne")]
+position = Vector2(1197.6, 790.446)
+
 [node name="player" parent="." instance=ExtResource("11_1upkr")]
