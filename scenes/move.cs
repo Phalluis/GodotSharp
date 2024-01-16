@@ -2,21 +2,10 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class move : CharacterBody2D
+public partial class Move : CharacterBody2D
 {
 	public const float Speed = 400.0f;
-	private static bool isAttacking;
 
-	public static bool IsAttacking()
-	{
-		return isAttacking;
-	}
-
-	// Method to set the attacking state
-	public void SetAttacking(bool attacking)
-	{
-		isAttacking = attacking;
-	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -51,13 +40,6 @@ public partial class move : CharacterBody2D
 
 		Velocity = velocity;
 		MoveAndSlide();
-
-		// Check for attack command
-		if (Input.IsActionPressed("attack") && !isAttacking)
-		{
-			isAttacking = true;
-			Attack();
-		}
 
 		// Flip the sprite based on the direction.
 		bool isLeft = velocity.X < 0;
@@ -97,31 +79,6 @@ public partial class move : CharacterBody2D
 		else
 		{
 			return "right";
-		}
-	}
-
-	private async void Attack()
-	{
-		AnimationPlayer attackAnimationPlayer = this.GetNode<AnimationPlayer>("atkanim");
-
-		if (!attackAnimationPlayer.IsPlaying())
-		{
-			// Get the mouse position in global coordinates
-			Vector2 mousePosition = GetGlobalMousePosition();
-
-			// Get the direction from the player to the mouse
-			Vector2 directionToMouse = (mousePosition - GlobalPosition).Normalized();
-
-			// Play the attack animation based on the direction to the mouse
-			attackAnimationPlayer.Play("atk_" + GetDirectionName(directionToMouse));
-
-			// Wait for the attack animation to finish
-			await ToSignal(attackAnimationPlayer, "animation_finished");
-
-			// Wait for a short delay before allowing another attack
-			await Task.Delay(500);
-
-			isAttacking = false;
 		}
 	}
 }

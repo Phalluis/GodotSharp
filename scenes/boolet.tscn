@@ -3,37 +3,18 @@
 [ext_resource type="Texture2D" uid="uid://drqyuknfnpl0q" path="res://assets/sprites/particles/dust_particles_01.png" id="1_diwty"]
 [ext_resource type="Script" path="res://scenes/boolet.cs" id="2_10s4y"]
 
-[sub_resource type="Curve" id="Curve_34trj"]
-min_value = -500.0
-max_value = 500.0
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.408397, -500), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
+[sub_resource type="CircleShape2D" id="CircleShape2D_phter"]
+radius = 4.12311
 
-[node name="boolet" type="Sprite2D"]
+[node name="Area2D" type="Area2D"]
+
+[node name="boolet" type="Sprite2D" parent="."]
 modulate = Color(1, 0, 0, 1)
 texture_filter = 1
-position = Vector2(-64, 11)
 texture = ExtResource("1_diwty")
 hframes = 4
 frame = 1
 script = ExtResource("2_10s4y")
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-amount = 10
-lifetime = 0.5
-fixed_fps = 24
-emission_shape = 1
-emission_sphere_radius = 4.0
-gravity = Vector2(0, 500)
-orbit_velocity_min = -1000.0
-orbit_velocity_max = 1000.0
-orbit_velocity_curve = SubResource("Curve_34trj")
-
-[node name="CPUParticles2D2" type="CPUParticles2D" parent="."]
-amount = 5
-lifetime = 0.5
-fixed_fps = 24
-emission_shape = 1
-emission_sphere_radius = 1.0
-particle_flag_align_y = true
-gravity = Vector2(0, 500)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phter")

@@ -1,8 +1,8 @@
 [gd_scene load_steps=20 format=3 uid="uid://8w6hx7nqtejb"]
 
-[ext_resource type="Script" path="res://scenes/move.cs" id="1_8apwr"]
+[ext_resource type="Script" path="res://scenes/player.cs" id="1_drqa8"]
+[ext_resource type="Script" path="res://scenes/Move.cs" id="1_m4wx7"]
 [ext_resource type="Texture2D" uid="uid://cjvokklpmimge" path="res://assets/sprites/characters/player.png" id="2_jcsvr"]
-[ext_resource type="Script" path="res://scenes/attackHitbox.cs" id="3_g2ciu"]
 [ext_resource type="PackedScene" uid="uid://bxs24t0u33pbr" path="res://scenes/boolet.tscn" id="4_7ed2p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6pph"]
@@ -81,6 +81,23 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [48, 49, 50, 51]
+}
+
+[sub_resource type="Animation" id="Animation_n4ltk"]
+resource_name = "boolet"
+length = 0.45
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../boolet:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 1, 0]
 }
 
 [sub_resource type="Animation" id="Animation_fa728"]
@@ -195,23 +212,6 @@ tracks/0/keys = {
 "values": [30, 31, 32, 33, 34, 35]
 }
 
-[sub_resource type="Animation" id="Animation_n4ltk"]
-resource_name = "boolet"
-length = 0.45
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../boolet:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 1, 0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7rtnb"]
 _data = {
 "RESET": SubResource("Animation_t7mc7"),
@@ -228,12 +228,13 @@ _data = {
 "walk_up": SubResource("Animation_nfoti")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_cehgb"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3v5nx"]
+size = Vector2(15.5317, 20)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" groups=["character"]]
 position = Vector2(1264, 655)
 scale = Vector2(2, 2)
-script = ExtResource("1_8apwr")
+script = ExtResource("1_m4wx7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -268,17 +269,14 @@ libraries = {
 "": SubResource("AnimationLibrary_7rtnb")
 }
 
-[node name="AttackHitbox" type="Area2D" parent="."]
-script = ExtResource("3_g2ciu")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
-position = Vector2(0, 8.5)
-rotation = 1.5708
-scale = Vector2(1.56843, 1.95909)
-shape = SubResource("CircleShape2D_cehgb")
-
 [node name="boolet" parent="." instance=ExtResource("4_7ed2p")]
+visible = false
 position = Vector2(0, 8)
-frame = 0
 
-[connection signal="body_entered" from="AttackHitbox" to="AttackHitbox" method="_on_body_entered"]
+[node name="hitbox" type="Area2D" parent="." groups=["enemy"]]
+scale = Vector2(0.965768, 1.0437)
+script = ExtResource("1_drqa8")
+
+[node name="hitbox" type="CollisionShape2D" parent="hitbox"]
+position = Vector2(0, 6.70691)
+shape = SubResource("RectangleShape2D_3v5nx")
