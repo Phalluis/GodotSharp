@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5lh8ksmmqw4u"]
+
+[ext_resource type="Texture2D" uid="uid://drqyuknfnpl0q" path="res://assets/sprites/particles/dust_particles_01.png" id="1_g5mpa"]
+[ext_resource type="Script" path="res://scenes/bullet.cs" id="1_rcswc"]
+
+[sub_resource type="Animation" id="Animation_wpk0p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4b76w"]
+resource_name = "bulletloop"
+length = 0.62
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 1, 0, 1, 2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 0, 0, 1), Color(0.796078, 0.796078, 0, 1), Color(1, 0, 0, 1), Color(0.796078, 0.796078, 0, 1), Color(1, 0, 0, 1), Color(0.796078, 0.796078, 0, 1), Color(1, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yoc1j"]
+_data = {
+"RESET": SubResource("Animation_wpk0p"),
+"bulletloop": SubResource("Animation_4b76w")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qiwwa"]
+radius = 4.12311
+
+[node name="Bullet" type="Area2D"]
+script = ExtResource("1_rcswc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+texture_filter = 1
+texture = ExtResource("1_g5mpa")
+hframes = 4
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Sprite2D"]
+scale = Vector2(4, 4)
+amount = 13
+gravity = Vector2(0, 0)
+color = Color(1, 0, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yoc1j")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qiwwa")

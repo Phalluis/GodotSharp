@@ -12,7 +12,6 @@ public partial class Move : CharacterBody2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		// Initialize charAnimations here if needed
 		hpbar = this.GetNode<ProgressBar>("hpbar");
 		sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 		charAnimations = this.GetNode<AnimationPlayer>("moveanim");

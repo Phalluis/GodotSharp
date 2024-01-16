@@ -614,7 +614,7 @@ sources/9 = SubResource("TileSetAtlasSource_htamb")
 sources/10 = SubResource("TileSetAtlasSource_ocyov")
 sources/11 = SubResource("TileSetAtlasSource_5yl00")
 
-[node name="Node2D" type="Node2D"]
+[node name="Level" type="Node2D"]
 scale = Vector2(1.06713, 0.903288)
 
 [node name="Levels" type="Node2D" parent="."]

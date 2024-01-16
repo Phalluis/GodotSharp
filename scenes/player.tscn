@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/player.cs" id="1_drqa8"]
 [ext_resource type="Script" path="res://scenes/Move.cs" id="1_m4wx7"]
 [ext_resource type="Texture2D" uid="uid://cjvokklpmimge" path="res://assets/sprites/characters/player.png" id="2_jcsvr"]
-[ext_resource type="PackedScene" uid="uid://bxs24t0u33pbr" path="res://scenes/boolet.tscn" id="4_7ed2p"]
+[ext_resource type="PackedScene" uid="uid://b5lh8ksmmqw4u" path="res://scenes/bullet.tscn" id="4_7ed2p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6pph"]
 size = Vector2(13, 19)
@@ -25,7 +25,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../boolet:frame")
+tracks/1/path = NodePath("../bullet:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -102,7 +102,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../boolet:frame")
+tracks/0/path = NodePath("../bullet:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -318,7 +318,7 @@ libraries = {
 "": SubResource("AnimationLibrary_7rtnb")
 }
 
-[node name="boolet" parent="." instance=ExtResource("4_7ed2p")]
+[node name="bullet" parent="." instance=ExtResource("4_7ed2p")]
 visible = false
 position = Vector2(0, 8)
 
