@@ -4,7 +4,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 public partial class player : Area2D
-{
+{	
+	public static int Hit;
 	private enemy enemyNode;
 	private ProgressBar hpbar;
 	private AnimationPlayer moveanim;
@@ -23,25 +24,24 @@ public partial class player : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		int result = enemyNode.GetAreaEnteredResult();
 
 		hpbar.MaxValue = maxhp;
 		hpbar.Value = hp;
-		Hpcalculation(result);
+		Hpcalculation();
 		GD.Print(hp);
 		if (hp == 0)
 		{
 		}
 	}
 
-	private void Hpcalculation(int result)
+	private void Hpcalculation()
 	{
-		if (result == 1)
+		if (Hit == 1)
 		{
 			hp -= 10;
 			sprite2D.Modulate = new Color(1.0f, 0.0f, 0.0f);
 		}
-		if (result == 0 && hp <= maxhp)
+		if (Hit == 0 && hp <= maxhp)
 		{
 			hp += 1;
 			sprite2D.Modulate = originalColor;

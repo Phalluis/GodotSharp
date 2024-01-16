@@ -1,11 +1,12 @@
 using Godot;
 using System;
 using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 public partial class enemy : CharacterBody2D
 {
 	private AnimationPlayer enemyanimations;
-	private CharacterBody2D player;
+	private CharacterBody2D playercharacter;
 	private float speed = 25.0f; // Adjust the speed as needed
 	private float distanceThreshold = 200.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
@@ -13,11 +14,11 @@ public partial class enemy : CharacterBody2D
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
-		player = GetParent().GetNode<CharacterBody2D>("player");
+		playercharacter = GetParent().GetNode<CharacterBody2D>("player");
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
-		hitbox.AreaEntered += HandleAreaEntered;
-		hitbox.AreaExited += HandleAreaExited;
+		hitbox.AreaEntered += OnAreaEntered;
+		hitbox.AreaExited += OnAreaExited;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -29,7 +30,7 @@ public partial class enemy : CharacterBody2D
 			Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 
 			// Calculate the direction from the enemy to the player
-			Vector2 direction = (player.Position - Position).Normalized();
+			Vector2 direction = (playercharacter.Position - Position).Normalized();
 			KinematicCollision2D collision = MoveAndCollide(direction * speed * (float)delta);
 			// Move the enemy towards the player
 			Position += direction * speed * (float)delta;
@@ -42,7 +43,7 @@ public partial class enemy : CharacterBody2D
 	private void UpdateAnimation()
 	{
 		// Calculate the distance between the enemy and the player
-		float distanceToPlayer = Position.DistanceTo(player.Position);
+		float distanceToPlayer = Position.DistanceTo(playercharacter.Position);
 		if (isPlayerDead)
 		{
 			enemyanimations.Play("idle");
@@ -89,35 +90,24 @@ public partial class enemy : CharacterBody2D
 
 	private int areaEnteredResult = 0;
 
-	void HandleAreaEntered(Area2D otherArea)
+	void OnAreaEntered(Area2D otherArea)
 	{
-		// Check if the entered object is a CharacterBody2D
 		if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
-			GD.Print("CharacterBody2D Entered: " + characterBody2D.Name);
-			// Store the result in the class variable
-			areaEnteredResult = 1;
+			player.Hit = 1;
 		}
 	}
 
-	private void HandleAreaExited(Area2D area)
+	private void OnAreaExited(Area2D area)
 	{
 		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
-			GD.Print("CharacterBody2D Entered: " + characterBody2D.Name);
-			// Store the result in the class variable
-			areaEnteredResult = 0;
+			player.Hit = 0;
 		}
 	}
 
-	public int GetAreaEnteredResult()
-	{
-		return areaEnteredResult;
-	}
-
-	internal static void PlayerisDead()
-	{
-		isPlayerDead = true;
-	}
-
+    internal static void PlayerisDead()
+    {
+        isPlayerDead = true;
+    }
 }
