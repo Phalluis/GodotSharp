@@ -15,7 +15,7 @@ public partial class Move : CharacterBody2D
 	public override void _Ready()
 	{
 		timer = this.GetNode<Timer>("spawntimer");
-		timer.WaitTime = 4;
+		timer.WaitTime = 1;
 		timer.Timeout += Spawn;
 		timer.Start();
 
