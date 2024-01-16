@@ -14,7 +14,6 @@ public partial class enemy : CharacterBody2D
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
-		playercharacter = GetParent().GetNode<CharacterBody2D>("player");
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
 		hitbox.AreaEntered += OnAreaEntered;
@@ -23,6 +22,7 @@ public partial class enemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		playercharacter = GetParent().GetNode<CharacterBody2D>("player");
 		bool playerdead = isPlayerDead;
 		UpdateAnimation();
 		if (!playerdead)

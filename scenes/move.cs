@@ -9,10 +9,16 @@ public partial class Move : CharacterBody2D
 	private AnimationPlayer charAnimations;
 	public const float Speed = 400.0f;
 	private enemy enemyScene;
+	private Timer timer;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		timer = this.GetNode<Timer>("spawntimer");
+		timer.WaitTime = 4;
+		timer.Timeout += Spawn;
+		timer.Start();
+
 		hpbar = this.GetNode<ProgressBar>("hpbar");
 		sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 		charAnimations = this.GetNode<AnimationPlayer>("moveanim");
@@ -60,7 +66,18 @@ public partial class Move : CharacterBody2D
 			hpbar.Hide();
 		}
 	}
+	public void Spawn()
+	{
+		enemyScene = (enemy)GD.Load<PackedScene>("res://scenes/enemy.tscn").Instantiate();
+		AddSibling(enemyScene);
 
+		// Calculate a random angle in radians
+		float randomAngle = (float)GD.RandRange(0, 2 * Mathf.Pi);
+
+		// Calculate the new position relative to the player
+		Vector2 offset = new Vector2(1000, 0).Rotated(randomAngle);
+		enemyScene.Position = sprite2d.Position + offset;
+	}
 	private void UpdateAnimation()
 	{
 		if (death)

@@ -340,3 +340,5 @@ theme_override_styles/background = SubResource("StyleBoxFlat_5ny2n")
 theme_override_styles/fill = SubResource("StyleBoxFlat_swn52")
 value = 53.84
 show_percentage = false
+
+[node name="spawntimer" type="Timer" parent="."]
