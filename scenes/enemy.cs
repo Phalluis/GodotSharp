@@ -98,6 +98,7 @@ public partial class enemy : CharacterBody2D
 	{
 		if (otherArea.IsInGroup("bullet"))
 		{
+			score.points += 1;
 			// Trigger death logic for this specific enemy
 			enemyanimations.Play("death");
 			// Remove the enemy from the scene
