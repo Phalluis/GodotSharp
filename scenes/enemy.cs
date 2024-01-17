@@ -5,11 +5,13 @@ using System.Security.Cryptography.X509Certificates;
 
 public partial class enemy : CharacterBody2D
 {
+	private int enemyInstanceId;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private float speed = 25.0f; // Adjust the speed as needed
 	private float distanceThreshold = 200.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
+	private int enemyId;
 
 	public override void _Ready()
 	{
@@ -18,6 +20,8 @@ public partial class enemy : CharacterBody2D
 		hitbox.Monitoring = true;
 		hitbox.AreaEntered += OnAreaEntered;
 		hitbox.AreaExited += OnAreaExited;
+
+		enemyId = (int)GD.Randi();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -55,15 +59,15 @@ public partial class enemy : CharacterBody2D
 				enemyanimations.Play("moving");
 				speed = 40f;
 			}
-			if (distanceToPlayer < distanceThreshold)
-			{
-				enemyanimations.Play("move");
-				speed = 25f;
-			}
-			if (distanceToPlayer < 50f)
+			else if (distanceToPlayer < 50f)
 			{
 				enemyanimations.Play("move");
 				speed = 20f;
+			}
+			else
+			{
+				enemyanimations.Play("move");
+				speed = 25f;
 			}
 		}
 	}
@@ -92,7 +96,15 @@ public partial class enemy : CharacterBody2D
 
 	void OnAreaEntered(Area2D otherArea)
 	{
-		if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
+		if (otherArea.IsInGroup("bullet"))
+		{
+			// Trigger death logic for this specific enemy
+			enemyanimations.Play("death");
+			// Remove the enemy from the scene
+			otherArea.QueueFree();
+			QueueFree();
+		}
+		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			player.Hit = 1;
 		}
@@ -106,14 +118,17 @@ public partial class enemy : CharacterBody2D
 		}
 	}
 
-    internal static void PlayerisDead()
-    {
-        isPlayerDead = true;
-    }
+	internal static void PlayerisDead()
+	{
+		isPlayerDead = true;
+	}
 
-    internal static void PlayerisAlive()
-    {
-        isPlayerDead = false;
-    }
-
+	internal static void PlayerisAlive()
+	{
+		isPlayerDead = false;
+	}
+	internal int GetEnemyId()
+	{
+		return enemyId;
+	}
 }

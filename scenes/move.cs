@@ -9,7 +9,8 @@ public partial class Move : CharacterBody2D
 	private AnimationPlayer charAnimations;
 	public const float Speed = 400.0f;
 	private enemy enemyScene;
-	private Timer timer;
+	private bullet bulletspawn;
+	private Timer timer, bulletcd;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -19,13 +20,18 @@ public partial class Move : CharacterBody2D
 		timer.Timeout += Spawn;
 		timer.Start();
 
+		bulletcd = GetNode<Timer>("bulletcd");
+        bulletcd.WaitTime = 2;
+		bulletcd.Timeout += buulet;
+		bulletcd.Start();
+
 		hpbar = this.GetNode<ProgressBar>("hpbar");
 		sprite2d = this.GetNode<Sprite2D>("Sprite2D");
 		charAnimations = this.GetNode<AnimationPlayer>("moveanim");
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 		UpdateAnimation();
 		bool isDead = death; // Store the death status to avoid potential race conditions
@@ -118,6 +124,12 @@ public partial class Move : CharacterBody2D
 			return "right";
 		}
 	}
+
+	    private void buulet()
+    {
+        bulletspawn = (bullet)GD.Load<PackedScene>("res://scenes/bullet.tscn").Instantiate();
+		AddChild(bulletspawn);
+    }
 
 	public static void Dead()
 	{
