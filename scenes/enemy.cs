@@ -110,4 +110,10 @@ public partial class enemy : CharacterBody2D
     {
         isPlayerDead = true;
     }
+
+    internal static void PlayerisAlive()
+    {
+        isPlayerDead = false;
+    }
+
 }

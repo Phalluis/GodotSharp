@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://ekbsv8gurqpe"]
+[gd_scene load_steps=3 format=3 uid="uid://ekbsv8gurqpe"]
 
+[ext_resource type="Script" path="res://scenes/gameover.cs" id="1_0iks3"]
 [ext_resource type="Texture2D" uid="uid://drg878flp0r75" path="res://assets/ui/1698346663843899.jpg" id="1_llsa6"]
 
 [node name="Gameover" type="Control"]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_0iks3")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -21,3 +23,17 @@ texture = ExtResource("1_llsa6")
 expand_mode = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TextureRect"]
+
+[node name="TryAgainButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -44.0
+offset_top = -31.0
+offset_right = 44.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Try Again?"

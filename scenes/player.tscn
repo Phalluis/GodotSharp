@@ -330,6 +330,8 @@ script = ExtResource("1_drqa8")
 position = Vector2(0, 6.70691)
 shape = SubResource("RectangleShape2D_3v5nx")
 
+[node name="restart" type="Timer" parent="hitbox"]
+
 [node name="hpbar" type="ProgressBar" parent="."]
 texture_filter = 1
 offset_left = -8.0

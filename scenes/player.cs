@@ -1,37 +1,42 @@
 using Godot;
 using System;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 public partial class player : Area2D
-{	
+{
 	public static int Hit;
 	private enemy enemyNode;
 	private ProgressBar hpbar;
 	private AnimationPlayer moveanim;
 	private Sprite2D sprite2D;
 	private Color originalColor;
-	private float hp = 1000, maxhp = 1000, ap = 10;
-	// Called when the node enters the scene tree for the first time.
+	public static float hp = 1000, maxhp = 1000, ap = 10;
+	private static Timer res;
+	private Boolean restartbool = true;
+	private bool hasRestarted = false;
+	private Node2D mainlevel;
 	public override void _Ready()
 	{
+		res = GetNode<Timer>("restart");
+		sprite2D = GetNode<Sprite2D>("../Sprite2D");
+		originalColor = sprite2D.Modulate;
 		enemyNode = GetParent().GetNode<enemy>("../enemy");
 		hpbar = GetNode<ProgressBar>("../hpbar");
 		sprite2D = GetNode<Sprite2D>("../Sprite2D");
-		originalColor = sprite2D.Modulate;
+		mainlevel = (Node2D)GetParent();
+		mainlevel = (Node2D)mainlevel.GetParent();
+
+		res.WaitTime = 5;
+		res.OneShot = true;
+		res.Timeout += Restart;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-
 		hpbar.MaxValue = maxhp;
 		hpbar.Value = hp;
 		Hpcalculation();
-		GD.Print(hp);
-		if (hp == 0)
-		{
-		}
 	}
 
 	private void Hpcalculation()
@@ -41,7 +46,7 @@ public partial class player : Area2D
 			hp -= 10;
 			sprite2D.Modulate = new Color(1.0f, 0.0f, 0.0f);
 		}
-		if (Hit == 0 && hp <= maxhp)
+		if (Hit == 0 && hp <= maxhp && hp != 0)
 		{
 			hp += 1;
 			sprite2D.Modulate = originalColor;
@@ -51,6 +56,28 @@ public partial class player : Area2D
 			Move.Dead();
 			enemy.PlayerisDead();
 		}
+		if (hp <= 0 && restartbool == true && !hasRestarted)
+		{
+			Move.Dead();
+			enemy.PlayerisDead();
+			res.Start();
+			restartbool = false;
+			hasRestarted = true;
+		}
 	}
 
+	private void Restart()
+	{
+		// Change the scene to the game over scene
+		GetTree().ChangeSceneToFile("res://scenes/gameover.tscn");
+		GD.Print("Has Restarted");
+	}
+
+    internal static void Revived()
+    {
+       	hp = maxhp;
+		GD.Print(hp);
+		Move.Alive();
+		enemy.PlayerisAlive();
+    }
 }

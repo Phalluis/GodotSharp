@@ -123,4 +123,10 @@ public partial class Move : CharacterBody2D
 	{
 		death = true;
 	}
+
+    internal static void Alive()
+    {
+        death = false;
+    }
+
 }
