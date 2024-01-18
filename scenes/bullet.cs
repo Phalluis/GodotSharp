@@ -3,6 +3,7 @@ using System;
 
 public partial class bullet : Area2D
 {
+    public static double cdbullet = 1;
     private double angularSpeed = 100.0;  // Angular speed in degrees per second
     private double initialSpeed = 20.0;  // Initial speed
     private double spiralSpeed = 200.0;  // Angular speed for spiraling

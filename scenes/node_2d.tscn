@@ -641,11 +641,6 @@ layer_0/tile_data = PackedInt32Array(0, 3, 0, 65536, 3, 0, 131072, 3, 0, 196608,
 position = Vector2(0, -0.667851)
 
 [node name="enemy" parent="." instance=ExtResource("12_nt1ne")]
-
-[node name="enemy2" parent="." instance=ExtResource("12_nt1ne")]
-position = Vector2(1143.25, 575.675)
-
-[node name="enemy3" parent="." instance=ExtResource("12_nt1ne")]
 position = Vector2(1197.6, 789.339)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

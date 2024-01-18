@@ -10,7 +10,7 @@ public partial class player : Area2D
 	private AnimationPlayer moveanim;
 	private Sprite2D sprite2D;
 	private Color originalColor;
-	public static float hp = 1000, maxhp = 1000, ap = 10;
+	public static float hp = 1000, maxhp = 1000, ap = 50;
 	private static Timer res;
 	private Boolean restartbool = true;
 	private bool hasRestarted = false;
@@ -58,8 +58,6 @@ public partial class player : Area2D
 		}
 		if (hp <= 0 && restartbool == true && !hasRestarted)
 		{
-			Move.Dead();
-			enemy.PlayerisDead();
 			res.Start();
 			restartbool = false;
 			hasRestarted = true;

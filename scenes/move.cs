@@ -3,6 +3,9 @@ using System;
 
 public partial class Move : CharacterBody2D
 {
+	public static double pts;
+	int cdreduceinterval = 1;
+
 	private Sprite2D sprite2d;
 	private ProgressBar hpbar;
 	private static Boolean death = false;
@@ -11,6 +14,9 @@ public partial class Move : CharacterBody2D
 	private enemy enemyScene;
 	private bullet bulletspawn;
 	private Timer timer, bulletcd;
+
+
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -21,7 +27,6 @@ public partial class Move : CharacterBody2D
 		timer.Start();
 
 		bulletcd = GetNode<Timer>("bulletcd");
-        bulletcd.WaitTime = 2;
 		bulletcd.Timeout += buulet;
 		bulletcd.Start();
 
@@ -30,9 +35,10 @@ public partial class Move : CharacterBody2D
 		charAnimations = this.GetNode<AnimationPlayer>("moveanim");
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
 	{
+		bulletcd.WaitTime = bullet.cdbullet;
 		UpdateAnimation();
 		bool isDead = death; // Store the death status to avoid potential race conditions
 		if (!isDead)
@@ -65,6 +71,15 @@ public partial class Move : CharacterBody2D
 			// Flip the sprite based on the direction.
 			bool isLeft = velocity.X < 0;
 			sprite2d.FlipH = isLeft;
+
+			if (pts == cdreduceinterval)
+			{
+				GD.Print(cdreduceinterval);
+				GD.Print(pts);
+				ReduceBulletCD();
+				pts = 0; // Reset the counter after reducing the cooldown
+				cdreduceinterval += 1; // Increment the counter for every 10 points increase
+			}
 		}
 		else
 		{
@@ -74,15 +89,21 @@ public partial class Move : CharacterBody2D
 	}
 	public void Spawn()
 	{
-		enemyScene = (enemy)GD.Load<PackedScene>("res://scenes/enemy.tscn").Instantiate();
-		AddSibling(enemyScene);
+		if (death == false)
+		{
+			enemyScene = (enemy)GD.Load<PackedScene>("res://scenes/enemy.tscn").Instantiate();
+			AddSibling(enemyScene);
 
-		// Calculate a random angle in radians
-		float randomAngle = (float)GD.RandRange(0, 2 * Mathf.Pi);
+			// Calculate a random angle in radians
+			float randomAngle = (float)GD.RandRange(0, 2 * Mathf.Pi);
 
-		// Calculate the new position relative to the player
-		Vector2 offset = new Vector2(1000, 0).Rotated(randomAngle);
-		enemyScene.Position = sprite2d.Position + offset;
+			// Calculate the new position relative to the player
+			Vector2 offset = new Vector2(1000, 1000).Rotated(randomAngle);
+			enemyScene.Position = sprite2d.Position + offset;
+		}
+		else
+		{
+		}
 	}
 	private void UpdateAnimation()
 	{
@@ -125,20 +146,35 @@ public partial class Move : CharacterBody2D
 		}
 	}
 
-	    private void buulet()
-    {
-        bulletspawn = (bullet)GD.Load<PackedScene>("res://scenes/bullet.tscn").Instantiate();
-		AddChild(bulletspawn);
-    }
+	private void ReduceBulletCD()
+	{
+		float reductionAmount = 0.05f;
+
+		// Ensure the cooldown doesn't go below a minimum value
+		bullet.cdbullet = Mathf.Max(bullet.cdbullet - reductionAmount, 0.1f);
+
+		// Declare a local variable to avoid modifying the class-level variable
+		double adjustedInterval = Mathf.Max(cdreduceinterval - 1, 0.5);
+	}
+
+	private void buulet()
+	{
+		if (!death)
+		{
+			bulletspawn = (bullet)GD.Load<PackedScene>("res://scenes/bullet.tscn").Instantiate();
+			AddChild(bulletspawn);
+		}
+	}
+
 
 	public static void Dead()
 	{
 		death = true;
 	}
 
-    internal static void Alive()
-    {
-        death = false;
-    }
+	internal static void Alive()
+	{
+		death = false;
+	}
 
 }

@@ -3,7 +3,7 @@ using System;
 
 public partial class score : Label
 {
-	public static int points;
+	public static int points, cdbullet;
 	private Label pointlabel;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
