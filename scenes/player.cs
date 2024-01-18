@@ -10,7 +10,7 @@ public partial class player : Area2D
 	private AnimationPlayer moveanim;
 	private Sprite2D sprite2D;
 	private Color originalColor;
-	public static float hp = 1000, maxhp = 1000, ap = 50;
+	public static float hp = 500, maxhp = 1000, ap = 10;
 	private static Timer res;
 	private Boolean restartbool = true;
 	private bool hasRestarted = false;
@@ -34,6 +34,15 @@ public partial class player : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (score.newap >= 10)
+		{
+			ap += 1;
+			score.newap = 0; // Reset score.points to 0
+		}
+		if (ap >= 70)
+		{
+			ap = 70;
+		}
 		hpbar.MaxValue = maxhp;
 		hpbar.Value = hp;
 		Hpcalculation();
@@ -71,11 +80,11 @@ public partial class player : Area2D
 		GD.Print("Has Restarted");
 	}
 
-    internal static void Revived()
-    {
-       	hp = maxhp;
+	internal static void Revived()
+	{
+		hp = maxhp;
 		GD.Print(hp);
 		Move.Alive();
 		enemy.PlayerisAlive();
-    }
+	}
 }

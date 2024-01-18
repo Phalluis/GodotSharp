@@ -3,7 +3,7 @@ using System;
 
 public partial class bullet : Area2D
 {
-    public static double cdbullet = 1;
+    public static double cdbullet = 2;
     private double angularSpeed = 100.0;  // Angular speed in degrees per second
     private double initialSpeed = 20.0;  // Initial speed
     private double spiralSpeed = 200.0;  // Angular speed for spiraling
@@ -19,6 +19,8 @@ public partial class bullet : Area2D
 
     private bool isMovingAway = true;
 
+    private Timer expirationTimer, expand;  // Timer node for bullet expiration
+
     public override void _Ready()
     {
         bulletLoop = GetNode<AnimationPlayer>("AnimationPlayer");
@@ -26,6 +28,21 @@ public partial class bullet : Area2D
 
         // Set the reference to the character
         sprite2D = GetNode<Sprite2D>("../Sprite2D");
+
+        // Initialize the expiration timer
+        expirationTimer = new Timer();
+        AddChild(expirationTimer);
+        expirationTimer.WaitTime = 10.0f;  // Set the expiration time to 10 seconds
+        expirationTimer.OneShot = true;
+        expirationTimer.Timeout += Timeout;
+        expirationTimer.Start();
+
+        expand = new Timer();
+        AddChild(expand);
+        expand.WaitTime = 5f;  // Set the expiration time to 5 seconds
+        expand.OneShot = true;
+        expand.Timeout += Expand;
+        expand.Start();
     }
 
     public override void _Process(double delta)
@@ -61,5 +78,17 @@ public partial class bullet : Area2D
 
         // Update the direction for the next frame
         Direction = Direction.Rotated((float)Mathf.DegToRad(spiralSpeed * delta));
+    }
+
+    private void Expand()
+    {
+        this.Scale = new Vector2(2,2);
+    }
+
+    // Method called when the expiration timer times out
+    private void Timeout()
+    {
+        // Queue-free the bullet after expiration
+        QueueFree();
     }
 }

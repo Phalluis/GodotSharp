@@ -10,19 +10,20 @@ public partial class Move : CharacterBody2D
 	private ProgressBar hpbar;
 	private static Boolean death = false;
 	private AnimationPlayer charAnimations;
-	public const float Speed = 400.0f;
+	private float Speed = 200.0f;
 	private enemy enemyScene;
 	private bullet bulletspawn;
+	private boom boomspawn;
+	private bool isBoomOnCooldown = false;
+
 	private Timer timer, bulletcd;
-
-
 
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		timer = this.GetNode<Timer>("spawntimer");
-		timer.WaitTime = 1;
+		timer.WaitTime = 0.5;
 		timer.Timeout += Spawn;
 		timer.Start();
 
@@ -40,11 +41,11 @@ public partial class Move : CharacterBody2D
 	{
 		bulletcd.WaitTime = bullet.cdbullet;
 		UpdateAnimation();
-		bool isDead = death; // Store the death status to avoid potential race conditions
+		bool isDead = death;
+
 		if (!isDead)
 		{
 			Vector2 velocity = Velocity;
-			// Get the input direction and handle the movement/deceleration.
 			float direction = Input.GetAxis("left", "right");
 			if (direction != 0)
 			{
@@ -68,17 +69,31 @@ public partial class Move : CharacterBody2D
 			Velocity = velocity;
 			MoveAndSlide();
 
-			// Flip the sprite based on the direction.
 			bool isLeft = velocity.X < 0;
 			sprite2d.FlipH = isLeft;
 
+			if (Input.IsActionPressed("attack"))
+			{
+				if (!isBoomOnCooldown)
+				{
+					StartBoomCooldown();
+
+					for (int i = 0; i < 3; i++)
+					{
+						boomspawn = (boom)GD.Load<PackedScene>("res://scenes/boom.tscn").Instantiate();
+						Vector2 playerDirection = GetPlayerFacingDirection();
+						boomspawn.SetDirection(playerDirection);
+						AddChild(boomspawn);
+					}
+				}
+			}
+
 			if (pts == cdreduceinterval)
 			{
-				GD.Print(cdreduceinterval);
-				GD.Print(pts);
 				ReduceBulletCD();
-				pts = 0; // Reset the counter after reducing the cooldown
-				cdreduceinterval += 1; // Increment the counter for every 10 points increase
+				ReduceBoomCD();
+				pts = 0;
+				cdreduceinterval += 1;
 			}
 		}
 		else
@@ -87,8 +102,22 @@ public partial class Move : CharacterBody2D
 			hpbar.Hide();
 		}
 	}
+
+	private async void StartBoomCooldown()
+	{
+		isBoomOnCooldown = true;
+		await ToSignal(timer, "timeout");
+		isBoomOnCooldown = false;
+	}
+
+	private void ReduceBoomCD()
+	{
+		float reductionAmount = 1.0f;
+		boom.cdboom = Mathf.Max(boom.cdboom - reductionAmount, 1.0f);
+	}
 	public void Spawn()
 	{
+		Speed += (float)0.05;
 		if (death == false)
 		{
 			enemyScene = (enemy)GD.Load<PackedScene>("res://scenes/enemy.tscn").Instantiate();
@@ -124,7 +153,7 @@ public partial class Move : CharacterBody2D
 		}
 	}
 
-	private string GetDirectionName(Vector2 direction)
+	public static string GetDirectionName(Vector2 direction)
 	{
 		float angle = Mathf.RadToDeg(direction.Angle());
 
@@ -162,9 +191,36 @@ public partial class Move : CharacterBody2D
 		if (!death)
 		{
 			bulletspawn = (bullet)GD.Load<PackedScene>("res://scenes/bullet.tscn").Instantiate();
+
 			AddChild(bulletspawn);
+
 		}
 	}
+
+	private Vector2 GetPlayerFacingDirection()
+	{
+		// Assuming 'charAnimations' is the AnimationPlayer for the player
+		string currentAnimation = charAnimations.CurrentAnimation;
+		if (currentAnimation == "idle")
+		{
+			return Vector2.Down;
+		}
+		if (currentAnimation == "walk_up")
+		{
+			return Vector2.Up;
+		}
+		else if (currentAnimation == "walk_down")
+		{
+			return Vector2.Down;
+		}
+		else
+		{
+			// Assuming 'sprite2d' is the player's sprite
+			return sprite2d.FlipH ? Vector2.Left : Vector2.Right;
+		}
+	}
+
+
 
 
 	public static void Dead()

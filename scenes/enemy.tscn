@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bmdg1bh23chl7"]
+[gd_scene load_steps=15 format=3 uid="uid://bmdg1bh23chl7"]
 
 [ext_resource type="Script" path="res://scenes/enemy.cs" id="1_2kwnn"]
 [ext_resource type="Texture2D" uid="uid://bpsyavuuhtote" path="res://assets/sprites/characters/slime.png" id="2_pmfna"]
@@ -6,9 +6,23 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7rqmi"]
 blend_mode = 1
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rxplh"]
-radius = 8.0
-height = 16.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_poyiy"]
+size = Vector2(6.6875, 6.9375)
+
+[sub_resource type="Animation" id="Animation_ubup4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [28]
+}
 
 [sub_resource type="Animation" id="Animation_jf0qx"]
 resource_name = "death"
@@ -29,7 +43,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_iaox1"]
 resource_name = "hurt"
-length = 0.27
+length = 0.21
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -107,21 +121,6 @@ tracks/0/keys = {
 "values": [14, 15, 16, 17, 18, 19, 20]
 }
 
-[sub_resource type="Animation" id="Animation_ubup4"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [28]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hydj8"]
 _data = {
 "RESET": SubResource("Animation_ubup4"),
@@ -132,9 +131,31 @@ _data = {
 "moving": SubResource("Animation_owey7")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ujpfb"]
-radius = 11.4976
-height = 25.234
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ksobc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bv8gh"]
+bg_color = Color(0.779471, 0.0416672, 0.0231529, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 1
+corner_radius_bottom_right = 1
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6w5bq"]
+bg_color = Color(0.0436941, 0.598141, 0.0356033, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 1
+corner_radius_bottom_right = 1
+corner_detail = 1
 
 [node name="enemy" type="CharacterBody2D"]
 position = Vector2(1330, 651)
@@ -151,8 +172,9 @@ frame = 28
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 material = SubResource("CanvasItemMaterial_7rqmi")
+position = Vector2(-0.46875, -0.15625)
 rotation = 1.5708
-shape = SubResource("CapsuleShape2D_rxplh")
+shape = SubResource("RectangleShape2D_poyiy")
 one_way_collision_margin = 0.0
 
 [node name="enemyanim" type="AnimationPlayer" parent="." groups=["enemy"]]
@@ -161,8 +183,23 @@ libraries = {
 }
 
 [node name="hitbox" type="Area2D" parent="." groups=["enemy"]]
+position = Vector2(-1, 1.5)
 scale = Vector2(0.951093, 1.0437)
 
 [node name="hitbox" type="CollisionShape2D" parent="hitbox"]
+visible = false
+position = Vector2(0.525711, -2.39532)
 rotation = 1.5708
-shape = SubResource("CapsuleShape2D_ujpfb")
+scale = Vector2(0.824372, 1.06442)
+shape = SubResource("RectangleShape2D_ksobc")
+
+[node name="hpbar" type="ProgressBar" parent="."]
+texture_filter = 1
+offset_left = -7.5
+offset_top = 7.0
+offset_right = 6.5
+offset_bottom = 10.0
+theme_override_styles/background = SubResource("StyleBoxFlat_bv8gh")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6w5bq")
+value = 53.84
+show_percentage = false

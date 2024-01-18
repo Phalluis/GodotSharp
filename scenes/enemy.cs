@@ -1,40 +1,65 @@
 using Godot;
 using System;
 using System.Runtime.Serialization;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 public partial class enemy : CharacterBody2D
 {
-	private int hp = 100, maxhp = 100;
+	private double enemybasehp = 50, enemybasemaxhp = 50;
+	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
-	private CharacterBody2D playercharacter,enemycharacter;
-	private float speed = 25.0f; // Adjust the speed as needed
+	private CharacterBody2D playercharacter;
+	private Sprite2D enemycharacter;
+	private float enemybasespeed = 25.0f; // Adjust the speed as needed
 	private float distanceThreshold = 200.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
+	private Timer statincrease,expiration, gametime;
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
 		enemyanimations.AnimationFinished += enemydead;
 
-		enemycharacter = this;
+		enemycharacter = this.GetNode<Sprite2D>("Sprite2D");
 		originalColor = enemycharacter.Modulate;
+
+		statincrease = new Timer();
+        AddChild(statincrease);
+        statincrease.WaitTime = 5;
+        statincrease.Timeout += increaseenemystat;
+        statincrease.Start();
+
+		gametime = GetNode<Timer>("../GameTime");
+        gametime.Start();
+
+		expiration = new Timer();
+        AddChild(expiration);
+        expiration.WaitTime = 60;
+        expiration.Timeout += expireenemy;
+        expiration.Start();
 
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
 		hitbox.AreaEntered += OnAreaEntered;
 		hitbox.AreaExited += OnAreaExited;
+
+		hpbar = this.GetNode<ProgressBar>("hpbar");
+
+		enemybasehp += stats.enemyhpincrement;
+		enemybasemaxhp += stats.enemymaxhpincrement;
+		enemybasespeed += stats.enemyspeedincrement;
 	}
 
-	public override void _PhysicsProcess(double delta)
+    public override void _PhysicsProcess(double delta)
 	{
-		enemycharacter.Modulate = originalColor;
+		hpbar.MaxValue = enemybasemaxhp;
+		hpbar.Value = enemybasehp;
 		playercharacter = GetParent().GetNode<CharacterBody2D>("player");
 		bool playerdead = isPlayerDead;
 		UpdateAnimation();
 
 		// Check if hp is greater than 0
-		if (hp > 0)
+		if (enemybasehp > 0)
 		{
 			if (!playerdead)
 			{
@@ -42,10 +67,10 @@ public partial class enemy : CharacterBody2D
 
 				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
-				KinematicCollision2D collision = MoveAndCollide(direction * speed * (float)delta);
+				KinematicCollision2D collision = MoveAndCollide(direction * stats.enemyspeed * (float)delta);
 
 				// Move the enemy towards the player
-				Position += direction * speed * (float)delta;
+				Position += direction * stats.enemyspeed * (float)delta;
 
 				// Update the facing direction based on the angle
 				UpdateFacingDirection(direction);
@@ -55,11 +80,11 @@ public partial class enemy : CharacterBody2D
 
 	private void UpdateAnimation()
 	{
-		if (hp <= 0)
+		if (enemybasehp <= 0)
 		{
+			enemycharacter.Modulate = new Color(1.0f, 0.0f, 0.0f);
 			enemyanimations.Play("death");
-			Area2D hitbox = this.GetNode<Area2D>("hitbox");
-			hitbox.Monitoring = false;
+
 		}
 		else
 		{
@@ -74,17 +99,17 @@ public partial class enemy : CharacterBody2D
 				if (distanceToPlayer > distanceThreshold)
 				{
 					enemyanimations.Play("moving");
-					speed = 40f;
+					stats.enemyspeed = enemybasespeed + 25.0f;
 				}
 				else if (distanceToPlayer < 50f)
 				{
 					enemyanimations.Play("move");
-					speed = 20f;
+					stats.enemyspeed = enemybasespeed + 15f;
 				}
 				else
 				{
 					enemyanimations.Play("move");
-					speed = 25f;
+					stats.enemyspeed = enemybasespeed + 5f;
 				}
 			}
 		}
@@ -114,7 +139,7 @@ public partial class enemy : CharacterBody2D
 
 	void OnAreaEntered(Area2D otherArea)
 	{
-		if (hp <= 0)
+		if (enemybasehp <= 0)
 		{
 			// Enemy is already dead, no need to process the hit
 			return;
@@ -134,11 +159,8 @@ public partial class enemy : CharacterBody2D
 			// Apply knockback
 			Knockback(knockbackDirection);
 
-			// Removes bullet
-			otherArea.QueueFree();
-			hp -= (int)player.ap;
-
-			enemycharacter.Modulate = new Color(1.0f, 1.0f, 1.0f);
+            // Removes bullet
+			enemybasehp -= (int)player.ap;
 		}
 		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
@@ -146,7 +168,7 @@ public partial class enemy : CharacterBody2D
 		}
 	}
 
-	void Knockback(Vector2 direction)
+    void Knockback(Vector2 direction)
 	{
 		// Adjust the knockback distance based on your needs
 		float knockbackDistance = 20.0f;
@@ -161,6 +183,7 @@ public partial class enemy : CharacterBody2D
 		{
 			score.points += 1;
 			Move.pts +=1;
+			score.newap += 1;
 			// Animation finished, queue-free the enemy
 			QueueFree();
 		}
@@ -183,4 +206,15 @@ public partial class enemy : CharacterBody2D
 	{
 		isPlayerDead = false;
 	}
+
+    private void increaseenemystat()
+    {
+        enemybasehp += 1;
+		enemybasemaxhp += 0.1;
+    }
+
+	private void expireenemy()
+    {
+        QueueFree();
+    }
 }

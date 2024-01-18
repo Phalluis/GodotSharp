@@ -1,5 +1,6 @@
-[gd_scene load_steps=26 format=3 uid="uid://cxlujs6laga5f"]
+[gd_scene load_steps=28 format=3 uid="uid://cxlujs6laga5f"]
 
+[ext_resource type="Script" path="res://scenes/stats.cs" id="1_6dayj"]
 [ext_resource type="Texture2D" uid="uid://c1nt172usixp" path="res://assets/sprites/objects/chest_02.png" id="5_1lt7a"]
 [ext_resource type="Texture2D" uid="uid://bh3dc3t6hebs3" path="res://assets/sprites/objects/rock_in_water_01-sheet.png" id="6_5sfy0"]
 [ext_resource type="Texture2D" uid="uid://clr405mxoacio" path="res://assets/sprites/tilesets/fences.png" id="7_qsgmg"]
@@ -12,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b0akr6ecr3vn7" path="res://assets/sprites/tilesets/walls/wooden_door.png" id="12_tkyr6"]
 [ext_resource type="PackedScene" uid="uid://b5lh8ksmmqw4u" path="res://scenes/bullet.tscn" id="12_txypo"]
 [ext_resource type="Texture2D" uid="uid://ccmmovlapu0eo" path="res://assets/sprites/tilesets/walls/wooden_door_b.png" id="13_pc8aq"]
+[ext_resource type="PackedScene" uid="uid://b7mjitudxe7m7" path="res://scenes/boom.tscn" id="14_0ily3"]
 [ext_resource type="Script" path="res://scenes/score.cs" id="14_3r4yl"]
 [ext_resource type="Texture2D" uid="uid://dtefwa0xtk0vt" path="res://assets/sprites/objects/chest_01.png" id="14_iyeph"]
 
@@ -618,6 +620,11 @@ sources/11 = SubResource("TileSetAtlasSource_5yl00")
 
 [node name="Level" type="Node2D"]
 scale = Vector2(1, 0.846)
+script = ExtResource("1_6dayj")
+
+[node name="GameTime" type="Timer" parent="."]
+wait_time = 4096.0
+autostart = true
 
 [node name="Levels" type="Node2D" parent="."]
 
@@ -638,7 +645,10 @@ layer_0/tile_data = PackedInt32Array(0, 3, 0, 65536, 3, 0, 131072, 3, 0, 196608,
 [node name="player" parent="." instance=ExtResource("11_1upkr")]
 
 [node name="Bullet2" parent="player" instance=ExtResource("12_txypo")]
+visible = false
 position = Vector2(0, -0.667851)
+
+[node name="Boom" parent="player" instance=ExtResource("14_0ily3")]
 
 [node name="enemy" parent="." instance=ExtResource("12_nt1ne")]
 position = Vector2(1197.6, 789.339)
