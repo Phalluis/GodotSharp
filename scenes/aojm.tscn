@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bb0vgl3o6j4pk"]
+[gd_scene load_steps=16 format=3 uid="uid://bb0vgl3o6j4pk"]
 
 [ext_resource type="Script" path="res://scenes/aojm.cs" id="1_fnik7"]
 [ext_resource type="Texture2D" uid="uid://cp8nkqxpovr6r" path="res://assets/sprites/aojm/AoiJMSpritei.png" id="2_abq4l"]
+[ext_resource type="AudioStream" uid="uid://bvxfxk27l6j2d" path="res://assets/music/AoJMChase.mp3" id="3_au0kh"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7rqmi"]
 blend_mode = 1
@@ -190,4 +191,5 @@ value = 53.84
 show_percentage = false
 metadata/_edit_use_anchors_ = true
 
-[node name="aojmmusic" type="AudioStreamPlayer2D" parent="."]
+[node name="aojmchase" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_au0kh")

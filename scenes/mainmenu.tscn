@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cgv7sk7x7o4ir"]
+[gd_scene load_steps=11 format=3 uid="uid://cgv7sk7x7o4ir"]
 
 [ext_resource type="Script" path="res://scenes/mainmenu.gd" id="1_pyu7v"]
 [ext_resource type="Texture2D" uid="uid://dq5oueblvvc5b" path="res://assets/ui/Gametitle.jpg" id="1_rmqlw"]
 [ext_resource type="Texture2D" uid="uid://cp8nkqxpovr6r" path="res://assets/sprites/aojm/AoiJMSpritei.png" id="2_1bhk8"]
+[ext_resource type="AudioStream" uid="uid://brr42aifcgiac" path="res://assets/music/MainMenuMusic.mp3" id="4_q57bw"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_nc6kd"]
 blend_mode = 2
@@ -203,5 +204,8 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_q5vpp")
 text = "Press Space or LMB to Start
 "
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_q57bw")
 
 [connection signal="animation_finished" from="TextureRect/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

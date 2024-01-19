@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 
 public partial class aojm : CharacterBody2D
 {
-	private double enemybasehp = 700, enemybasemaxhp = 700;
+	private double enemybasehp = 500, enemybasemaxhp = 500;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private Sprite2D enemycharacter;
-	private float enemybasespeed = 50.0f; // Adjust the speed as needed
-	private float distanceThreshold = 200.0f; // Adjust the distance threshold
+	private float enemybasespeed = 150.0f; // Adjust the speed as needed
+	private float distanceThreshold = 100.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
 	private Timer statincrease, expiration, gametime;
+	private AudioStreamPlayer2D aojmchase;
+	public static bool aojmchasebool;
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
@@ -42,9 +44,22 @@ public partial class aojm : CharacterBody2D
 		enemybasehp += stats.enemyhpincrement;
 		enemybasemaxhp += stats.enemymaxhpincrement;
 		enemybasespeed += stats.enemyspeedincrement;
+
+		aojmchase = this.GetNode<AudioStreamPlayer2D>("aojmchase");
+
+		AudioStream audioStream = GD.Load<AudioStream>("res://assets/music/AoJMChase.mp3") as AudioStream;
+		aojmchase.VolumeDb = 10;
+		aojmchase.Play();
+		aojmchasebool = true;
+		aojmchase.Finished += playagain;
 	}
 
-	public override void _PhysicsProcess(double delta)
+    private void playagain()
+    {
+        aojmchase.Play();
+    }
+
+    public override void _PhysicsProcess(double delta)
 	{
 		hpbar.MaxValue = enemybasemaxhp;
 		hpbar.Value = enemybasehp;
@@ -65,7 +80,6 @@ public partial class aojm : CharacterBody2D
 
 				// Move the enemy towards the player
 				Position += direction * stats.enemyspeed * (float)delta;
-
 				// Update the facing direction based on the angle
 			}
 		}
@@ -90,7 +104,7 @@ public partial class aojm : CharacterBody2D
 			{
 				if (distanceToPlayer > distanceThreshold)
 				{
-					enemybasespeed += 1000f;
+					enemybasespeed += 5000f;
 				}
 				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
@@ -126,7 +140,6 @@ public partial class aojm : CharacterBody2D
 	{
 		if (enemybasehp <= 0)
 		{
-
 			return;
 		}
 		if (otherArea.IsInGroup("hazardtoenemy"))
@@ -183,12 +196,13 @@ public partial class aojm : CharacterBody2D
 
 	private void enemydead(StringName animName)
 	{
-		if (animName == "idle")
+		if (animName == "idle" && aojmchasebool is false)
 		{
 			score.points += 100;
 			Move.pts += 100;
 			score.newap += 10;
 			// Animation finished, queue-free the enemy
+			aojmchase.Stop();
 			QueueFree();
 		}
 	}
@@ -198,7 +212,7 @@ public partial class aojm : CharacterBody2D
 		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet") || area.IsInGroup("boom"))
 		{
 			player.Hit = 0;
-			player.hp -= 2;
+			player.hp -= 10;
 		}
 	}
 
