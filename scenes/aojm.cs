@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public partial class aojm : CharacterBody2D
 {
-	private double enemybasehp = 500, enemybasemaxhp = 500;
+	private double enemybasehp = 700, enemybasemaxhp = 700;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
@@ -31,12 +31,6 @@ public partial class aojm : CharacterBody2D
 
 		gametime = GetNode<Timer>("../GameTime");
 		gametime.Start();
-
-		expiration = new Timer();
-		AddChild(expiration);
-		expiration.WaitTime = 60;
-		expiration.Timeout += expireenemy;
-		expiration.Start();
 
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
@@ -94,6 +88,10 @@ public partial class aojm : CharacterBody2D
 			}
 			else
 			{
+				if (distanceToPlayer > distanceThreshold)
+				{
+					enemybasespeed += 1000f;
+				}
 				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
 
@@ -128,38 +126,56 @@ public partial class aojm : CharacterBody2D
 	{
 		if (enemybasehp <= 0)
 		{
-			// Enemy is already dead, no need to process the hit
+
 			return;
 		}
-
-		if (otherArea.IsInGroup("bullet"))
+		if (otherArea.IsInGroup("hazardtoenemy"))
 		{
-			// Play hurt animation
-			enemyanimations.Play("idle");
+			if (otherArea.IsInGroup("bullet"))
+			{
+				// Play hurt animation
+				enemyanimations.Play("idle");
 
-			// Find the player's position
-			Vector2 playerPosition = playercharacter.Position;
+				// Find the player's position
+				Vector2 playerPosition = playercharacter.Position;
 
-			// Calculate the direction from the enemy to the player
-			Vector2 knockbackDirection = (Position - playerPosition).Normalized();
+				// Calculate the direction from the enemy to the player
+				Vector2 knockbackDirection = (Position - playerPosition).Normalized();
 
-			// Apply knockback
-			Knockback(knockbackDirection);
+				// Apply knockback
+				Knockback(knockbackDirection);
 
-			// Removes bullet
-			enemybasehp -= (int)player.ap;
+				enemybasehp -= player.ap * bullet.bulletdamage;
+			}
+
+			if (otherArea.IsInGroup("boom"))
+			{
+				// Play hurt animation
+				enemyanimations.Play("idle");
+
+				// Find the player's position
+				Vector2 playerPosition = playercharacter.Position;
+
+				// Calculate the direction from the enemy to the player
+				Vector2 knockbackDirection = (Position - playerPosition).Normalized();
+
+				// Apply knockback
+				Knockback(knockbackDirection);
+
+				enemybasehp -= player.ap * boom.boomdamage;
+			}
 		}
-		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || otherArea.IsInGroup("bullet"))
+		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			player.Hit = 1;
-			player.hp -= 20;
+			player.hp -= 150;
 		}
 	}
 
 	void Knockback(Vector2 direction)
 	{
 		// Adjust the knockback distance based on your needs
-		float knockbackDistance = 20.0f;
+		float knockbackDistance = 5.0f;
 
 		// Apply knockback to the enemy
 		Position += direction * knockbackDistance;
@@ -179,9 +195,10 @@ public partial class aojm : CharacterBody2D
 
 	private void OnAreaExited(Area2D area)
 	{
-		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet"))
+		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet") || area.IsInGroup("boom"))
 		{
 			player.Hit = 0;
+			player.hp -= 2;
 		}
 	}
 
@@ -199,10 +216,5 @@ public partial class aojm : CharacterBody2D
 	{
 		enemybasehp += 1;
 		enemybasemaxhp += 1;
-	}
-
-	private void expireenemy()
-	{
-		QueueFree();
 	}
 }

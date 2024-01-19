@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 public partial class player : Area2D
@@ -13,7 +14,7 @@ public partial class player : Area2D
 	public static float hp = 300, maxhp = 300, ap = 5;
 	private static Timer res;
 	private Boolean restartbool = true;
-	private bool hasRestarted = false;
+	private bool hasRestarted = false, hpregen;
 	private Node2D mainlevel;
 	public override void _Ready()
 	{
@@ -34,6 +35,7 @@ public partial class player : Area2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		GD.Print(hp);
 		if (score.newap >= 10)
 		{
 			ap += 1;
@@ -52,23 +54,30 @@ public partial class player : Area2D
 	{
 		if (Hit == 1)
 		{
+			hp -= 1;
 			sprite2D.Modulate = new Color(1.0f, 0.0f, 0.0f);
+			hpregen = false;
 		}
-		if (Hit == 0 && hp <= maxhp && hp != 0)
+		if (Hit == 0 && hp < maxhp && hp >= 0)
 		{
 			hp += 1;
-			sprite2D.Modulate = originalColor;
+			hpregen = true;
+			sprite2D.Modulate = new Color(0.0f, 1.0f, 0.0f);
 		}
-		if (hp <= 0)
+		else if (hp <= 0 && hpregen is false)
 		{
 			Move.Dead();
 			enemy.PlayerisDead();
 		}
-		if (hp <= 0 && restartbool == true && !hasRestarted)
+		if (hp <= 0 && restartbool is true && !hasRestarted)
 		{
 			res.Start();
 			restartbool = false;
 			hasRestarted = true;
+		}
+		if (hp >= maxhp)
+		{
+			sprite2D.Modulate = originalColor;
 		}
 	}
 
@@ -86,4 +95,5 @@ public partial class player : Area2D
 		Move.Alive();
 		enemy.PlayerisAlive();
 	}
+
 }

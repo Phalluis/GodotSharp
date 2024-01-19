@@ -131,7 +131,8 @@ _data = {
 "moving": SubResource("Animation_owey7")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ksobc"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_8pmky"]
+radius = 11.6225
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bv8gh"]
 bg_color = Color(0.779471, 0.0416672, 0.0231529, 1)
@@ -187,11 +188,10 @@ position = Vector2(-1, 1.5)
 scale = Vector2(0.951093, 1.0437)
 
 [node name="hitbox" type="CollisionShape2D" parent="hitbox"]
-visible = false
 position = Vector2(0.525711, -2.39532)
 rotation = 1.5708
 scale = Vector2(0.824372, 1.06442)
-shape = SubResource("RectangleShape2D_ksobc")
+shape = SubResource("CircleShape2D_8pmky")
 
 [node name="hpbar" type="ProgressBar" parent="."]
 texture_filter = 1

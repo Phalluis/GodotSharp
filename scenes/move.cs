@@ -18,7 +18,7 @@ public partial class Move : CharacterBody2D
 	private bool isBoomOnCooldown = false;
 
 	private Timer timer, slimetimer, aojmtimer, bulletcd;
- 
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -51,8 +51,8 @@ public partial class Move : CharacterBody2D
 		charAnimations = this.GetNode<AnimationPlayer>("moveanim");
 	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
 	{
 		bulletcd.WaitTime = bullet.cdbullet;
 		UpdateAnimation();
@@ -92,14 +92,11 @@ public partial class Move : CharacterBody2D
 				if (!isBoomOnCooldown)
 				{
 					StartBoomCooldown();
+					boomspawn = (boom)GD.Load<PackedScene>("res://scenes/boom.tscn").Instantiate();
+					Vector2 playerDirection = GetPlayerFacingDirection();
+					boomspawn.SetDirection(playerDirection);
+					AddChild(boomspawn);
 
-					for (int i = 0; i < 3; i++)
-					{
-						boomspawn = (boom)GD.Load<PackedScene>("res://scenes/boom.tscn").Instantiate();
-						Vector2 playerDirection = GetPlayerFacingDirection();
-						boomspawn.SetDirection(playerDirection);
-						AddChild(boomspawn);
-					}
 				}
 			}
 
@@ -143,27 +140,27 @@ public partial class Move : CharacterBody2D
 
 			// Calculate the new position relative to the player
 			Vector2 offset = new Vector2(1000, 1000).Rotated(randomAngle);
-			
+
 			enemyScene.Position = sprite2d.Position + offset;
 		}
 	}
 
-	    private void aojmspawn()
-    {
-        Speed += (float)0.05;
+	private void aojmspawn()
+	{
+		Speed += (float)0.05;
 		if (death == false)
 		{
-			aojmscene = (aojm)GD.Load<PackedScene>("res://scenes/aojm.tscn").Instantiate(); 
+			aojmscene = (aojm)GD.Load<PackedScene>("res://scenes/aojm.tscn").Instantiate();
 			AddSibling(aojmscene);
 
 			// Calculate a random angle in radians
 			float randomAngleforjm = (float)GD.RandRange(0, 2 * Mathf.Pi);
 			// Calculate the new position relative to the player
 			Vector2 offsetjm = new Vector2(1000, 1000).Rotated(randomAngleforjm);
-			
+
 			aojmscene.Position = sprite2d.Position + offsetjm;
 		}
-    }
+	}
 
 
 	private void UpdateAnimation()

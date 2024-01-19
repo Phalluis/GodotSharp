@@ -14,7 +14,7 @@ public partial class enemy : CharacterBody2D
 	private float distanceThreshold = 200.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
-	private Timer statincrease,expiration, gametime;
+	private Timer statincrease, expiration, gametime;
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
@@ -24,19 +24,19 @@ public partial class enemy : CharacterBody2D
 		originalColor = enemycharacter.Modulate;
 
 		statincrease = new Timer();
-        AddChild(statincrease);
-        statincrease.WaitTime = 5;
-        statincrease.Timeout += increaseenemystat;
-        statincrease.Start();
+		AddChild(statincrease);
+		statincrease.WaitTime = 5;
+		statincrease.Timeout += increaseenemystat;
+		statincrease.Start();
 
 		gametime = GetNode<Timer>("../GameTime");
-        gametime.Start();
+		gametime.Start();
 
 		expiration = new Timer();
-        AddChild(expiration);
-        expiration.WaitTime = 60;
-        expiration.Timeout += expireenemy;
-        expiration.Start();
+		AddChild(expiration);
+		expiration.WaitTime = 60;
+		expiration.Timeout += expireenemy;
+		expiration.Start();
 
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
@@ -50,7 +50,7 @@ public partial class enemy : CharacterBody2D
 		enemybasespeed += stats.enemyspeedincrement;
 	}
 
-    public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		hpbar.MaxValue = enemybasemaxhp;
 		hpbar.Value = enemybasehp;
@@ -141,35 +141,53 @@ public partial class enemy : CharacterBody2D
 	{
 		if (enemybasehp <= 0)
 		{
-			// Enemy is already dead, no need to process the hit
+
 			return;
 		}
-
-		if (otherArea.IsInGroup("bullet"))
+		if (otherArea.IsInGroup("hazardtoenemy"))
 		{
-			// Play hurt animation
-			enemyanimations.Play("hurt");
+			if (otherArea.IsInGroup("bullet"))
+			{
+				// Play hurt animation
+				enemyanimations.Play("hurt");
 
-			// Find the player's position
-			Vector2 playerPosition = playercharacter.Position;
+				// Find the player's position
+				Vector2 playerPosition = playercharacter.Position;
 
-			// Calculate the direction from the enemy to the player
-			Vector2 knockbackDirection = (Position - playerPosition).Normalized();
+				// Calculate the direction from the enemy to the player
+				Vector2 knockbackDirection = (Position - playerPosition).Normalized();
 
-			// Apply knockback
-			Knockback(knockbackDirection);
+				// Apply knockback
+				Knockback(knockbackDirection);
 
-            // Removes bullet
-			enemybasehp -= (int)player.ap;
+				enemybasehp -= player.ap * bullet.bulletdamage;
+			}
+
+			if (otherArea.IsInGroup("boom"))
+			{
+				// Play hurt animation
+				enemyanimations.Play("hurt");
+
+				// Find the player's position
+				Vector2 playerPosition = playercharacter.Position;
+
+				// Calculate the direction from the enemy to the player
+				Vector2 knockbackDirection = (Position - playerPosition).Normalized();
+
+				// Apply knockback
+				Knockback(knockbackDirection);
+
+				enemybasehp -= player.ap * boom.boomdamage;
+			}
 		}
 		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			player.Hit = 1;
-			player.hp -= 10;
+			player.hp -= 50;
 		}
 	}
 
-    void Knockback(Vector2 direction)
+	void Knockback(Vector2 direction)
 	{
 		// Adjust the knockback distance based on your needs
 		float knockbackDistance = 20.0f;
@@ -183,7 +201,7 @@ public partial class enemy : CharacterBody2D
 		if (animName == "death")
 		{
 			score.points += 1;
-			Move.pts +=1;
+			Move.pts += 1;
 			score.newap += 1;
 			// Animation finished, queue-free the enemy
 			QueueFree();
@@ -208,14 +226,14 @@ public partial class enemy : CharacterBody2D
 		isPlayerDead = false;
 	}
 
-    private void increaseenemystat()
-    {
-        enemybasehp += 1;
+	private void increaseenemystat()
+	{
+		enemybasehp += 1;
 		enemybasemaxhp += 0.1;
-    }
+	}
 
 	private void expireenemy()
-    {
-        QueueFree();
-    }
+	{
+		QueueFree();
+	}
 }

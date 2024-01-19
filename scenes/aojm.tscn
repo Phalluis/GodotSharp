@@ -20,8 +20,24 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
+"update": 0,
 "values": [28]
+}
+
+[sub_resource type="Animation" id="Animation_ybdyw"]
+resource_name = "idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1]
 }
 
 [sub_resource type="Animation" id="Animation_erb73"]
@@ -37,7 +53,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [0, 1, 2, 3]
 }
 
@@ -54,7 +70,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [4, 5, 6, 7]
 }
 
@@ -70,7 +86,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [8, 9, 10, 11]
 }
 
@@ -86,24 +102,8 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
+"update": 0,
 "values": [12, 13, 14, 15]
-}
-
-[sub_resource type="Animation" id="Animation_ybdyw"]
-resource_name = "idle"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hydj8"]
@@ -145,17 +145,16 @@ corner_radius_bottom_right = 1
 corner_detail = 1
 
 [node name="aojm" type="CharacterBody2D"]
-position = Vector2(1330, 651)
+position = Vector2(874, 431)
 scale = Vector2(2, 2)
 script = ExtResource("1_fnik7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(-1.5, -2.5)
+position = Vector2(-2.52, -2.5)
 texture = ExtResource("2_abq4l")
 hframes = 4
 vframes = 4
-frame = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 material = SubResource("CanvasItemMaterial_7rqmi")
@@ -189,3 +188,6 @@ theme_override_styles/background = SubResource("StyleBoxFlat_bv8gh")
 theme_override_styles/fill = SubResource("StyleBoxFlat_6w5bq")
 value = 53.84
 show_percentage = false
+metadata/_edit_use_anchors_ = true
+
+[node name="aojmmusic" type="AudioStreamPlayer2D" parent="."]

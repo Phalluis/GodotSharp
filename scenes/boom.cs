@@ -3,11 +3,13 @@ using System;
 
 public partial class boom : Area2D
 {
+    public static double boomdamage = 1.2;
     public static float cdboom;
     private float speed = 400.0f;
     private float lifetime = 2.0f;
     private Timer expirationTimer, expand;
     private Vector2 direction;
+
 
     public override void _Ready()
     {

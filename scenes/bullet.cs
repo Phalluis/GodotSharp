@@ -3,6 +3,7 @@ using System;
 
 public partial class bullet : Area2D
 {
+    public static double bulletdamage = 0.8;
     public static double cdbullet = 2;
     private double angularSpeed = 100.0;  // Angular speed in degrees per second
     private double initialSpeed = 20.0;  // Initial speed
@@ -10,15 +11,11 @@ public partial class bullet : Area2D
     private double radius = 50.0;        // Initial radius
     private double maxRadius = 100.0;    // Maximum allowed radius
     private AnimationPlayer bulletLoop;
-
     // Property to store the direction of the bullet
     public Vector2 Direction { get; set; } = Vector2.Right; // Assuming bullet starts moving to the right
-
     // Reference to the character (replace 'Sprite2D' with the actual class of your character)
     private Sprite2D sprite2D;
-
     private bool isMovingAway = true;
-
     private Timer expirationTimer, expand;  // Timer node for bullet expiration
 
     public override void _Ready()

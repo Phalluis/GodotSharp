@@ -43,7 +43,7 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_1s18e"]
 radius = 4.0
 
-[node name="Boom" type="Area2D" groups=["bullet"]]
+[node name="Boom" type="Area2D" groups=["boom", "hazardtoenemy"]]
 script = ExtResource("1_iyfi3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
