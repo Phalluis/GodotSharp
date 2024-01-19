@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cxlujs6laga5f"]
+[gd_scene load_steps=29 format=3 uid="uid://cxlujs6laga5f"]
 
 [ext_resource type="Script" path="res://scenes/stats.cs" id="1_6dayj"]
 [ext_resource type="Texture2D" uid="uid://c1nt172usixp" path="res://assets/sprites/objects/chest_02.png" id="5_1lt7a"]
@@ -16,6 +16,57 @@
 [ext_resource type="PackedScene" path="res://scenes/boom.tscn" id="14_0ily3"]
 [ext_resource type="Script" path="res://scenes/score.cs" id="14_3r4yl"]
 [ext_resource type="Texture2D" uid="uid://dtefwa0xtk0vt" path="res://assets/sprites/objects/chest_01.png" id="14_iyeph"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uebt8"]
+texture = ExtResource("7_qsgmg")
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+3:0/0 = 0
+3:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:0/0/physics_layer_0/angular_velocity = 0.0
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+2:1/0 = 0
+2:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:1/0/physics_layer_0/angular_velocity = 0.0
+3:1/0 = 0
+3:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:1/0/physics_layer_0/angular_velocity = 0.0
+0:2/0 = 0
+0:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:2/0/physics_layer_0/angular_velocity = 0.0
+1:2/0 = 0
+1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:2/0/physics_layer_0/angular_velocity = 0.0
+2:2/0 = 0
+2:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:2/0/physics_layer_0/angular_velocity = 0.0
+3:2/0 = 0
+3:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:2/0/physics_layer_0/angular_velocity = 0.0
+0:3/0 = 0
+0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:3/0/physics_layer_0/angular_velocity = 0.0
+1:3/0 = 0
+1:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:3/0/physics_layer_0/angular_velocity = 0.0
+2:3/0 = 0
+2:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:3/0/physics_layer_0/angular_velocity = 0.0
+3:3/0 = 0
+3:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+3:3/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ocyov"]
 texture = ExtResource("5_1lt7a")
@@ -263,6 +314,7 @@ texture = ExtResource("9_3g5jg")
 1:5/0/physics_layer_0/angular_velocity = 0.0
 1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5, -8, -5, -7, -4, -7, -4, -5, -5, -5, -5, 0, -6, 0, -6, 6, -5, 6, -5, 8, -4, 8, 1, 8, 1, 7, -1, 7, -1, 4, 0, 4, 0, 2, 1, 2, 1, 1, -1, 1, -1, 0, -2, 0, -2, -3, -1, -3, -1, -5, 1, -5, 1, -7, 0, -7, 0, -8)
 2:5/0 = 0
+2:5/0/probability = 0.0
 2:5/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 2:5/0/physics_layer_0/angular_velocity = 0.0
 3:5/0 = 0
@@ -288,7 +340,7 @@ texture = ExtResource("9_3g5jg")
 2:6/0 = 0
 2:6/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 2:6/0/physics_layer_0/angular_velocity = 0.0
-2:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 6, -5, 6, -5, 7, 0, 7, 0, 6, 4, 6, 4, 5, 5, 5, 5, 6, 8, 6, 8, -8)
+2:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -5, -7, -5, -7, -6, -6, -6, -6, -7, -5, -7, -5, -6, -4, -6, -4, -5, -2, -5, -2, -6, -1, -6, -1, -7, 0, -7, 0, -5, 1, -5, 1, -4, 3, -4, 3, -5, 4, -5, 4, -6, 5, -6, 5, -7, 6, -7, 6, -6, 6, -5, 7, -5, 7, -4, 8, -4, 8, 6, 5, 6, 5, 5, 4, 5, 4, 6, 0, 6, 0, 7, -5, 7, -5, 6, -8, 6)
 3:6/0 = 0
 3:6/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 3:6/0/physics_layer_0/angular_velocity = 0.0
@@ -617,6 +669,7 @@ sources/8 = SubResource("TileSetAtlasSource_b71ea")
 sources/9 = SubResource("TileSetAtlasSource_htamb")
 sources/10 = SubResource("TileSetAtlasSource_ocyov")
 sources/11 = SubResource("TileSetAtlasSource_5yl00")
+sources/0 = SubResource("TileSetAtlasSource_uebt8")
 
 [node name="Level" type="Node2D"]
 scale = Vector2(1, 0.846)

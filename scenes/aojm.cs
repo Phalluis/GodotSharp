@@ -3,18 +3,18 @@ using System;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-public partial class enemy : CharacterBody2D
+public partial class aojm : CharacterBody2D
 {
-	private double enemybasehp = 50, enemybasemaxhp = 50;
+	private double enemybasehp = 500, enemybasemaxhp = 500;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private Sprite2D enemycharacter;
-	private float enemybasespeed = 25.0f; // Adjust the speed as needed
+	private float enemybasespeed = 50.0f; // Adjust the speed as needed
 	private float distanceThreshold = 200.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
-	private Timer statincrease,expiration, gametime;
+	private Timer statincrease, expiration, gametime;
 	public override void _Ready()
 	{
 		enemyanimations = this.GetNode<AnimationPlayer>("enemyanim");
@@ -24,19 +24,19 @@ public partial class enemy : CharacterBody2D
 		originalColor = enemycharacter.Modulate;
 
 		statincrease = new Timer();
-        AddChild(statincrease);
-        statincrease.WaitTime = 5;
-        statincrease.Timeout += increaseenemystat;
-        statincrease.Start();
+		AddChild(statincrease);
+		statincrease.WaitTime = 1;
+		statincrease.Timeout += increaseenemystat;
+		statincrease.Start();
 
 		gametime = GetNode<Timer>("../GameTime");
-        gametime.Start();
+		gametime.Start();
 
 		expiration = new Timer();
-        AddChild(expiration);
-        expiration.WaitTime = 60;
-        expiration.Timeout += expireenemy;
-        expiration.Start();
+		AddChild(expiration);
+		expiration.WaitTime = 60;
+		expiration.Timeout += expireenemy;
+		expiration.Start();
 
 		Area2D hitbox = this.GetNode<Area2D>("hitbox");
 		hitbox.Monitoring = true;
@@ -50,7 +50,7 @@ public partial class enemy : CharacterBody2D
 		enemybasespeed += stats.enemyspeedincrement;
 	}
 
-    public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		hpbar.MaxValue = enemybasemaxhp;
 		hpbar.Value = enemybasehp;
@@ -73,7 +73,6 @@ public partial class enemy : CharacterBody2D
 				Position += direction * stats.enemyspeed * (float)delta;
 
 				// Update the facing direction based on the angle
-				UpdateFacingDirection(direction);
 			}
 		}
 	}
@@ -83,8 +82,7 @@ public partial class enemy : CharacterBody2D
 		if (enemybasehp <= 0)
 		{
 			enemycharacter.Modulate = new Color(1.0f, 0.0f, 0.0f);
-			enemyanimations.Play("death");
-
+			enemyanimations.Play("idle");
 		}
 		else
 		{
@@ -96,44 +94,33 @@ public partial class enemy : CharacterBody2D
 			}
 			else
 			{
-				if (distanceToPlayer > distanceThreshold)
+				// Calculate the direction from the enemy to the player
+				Vector2 direction = (playercharacter.Position - Position).Normalized();
+
+				// Update the facing direction based on the angle
+				float angle = Mathf.RadToDeg(direction.Angle());
+
+				// Choose the appropriate animation based on the angle
+				if (angle > -45 && angle <= 45)
 				{
-					enemyanimations.Play("moving");
-					stats.enemyspeed = enemybasespeed + 25.0f;
+					enemyanimations.Play("walk_right");
 				}
-				else if (distanceToPlayer < 50f)
+				else if (angle > 45 && angle <= 135)
 				{
-					enemyanimations.Play("move");
-					stats.enemyspeed = enemybasespeed + 15f;
+					enemyanimations.Play("walk_down");
+				}
+				else if (angle > -135)
+				{
+					enemyanimations.Play("walk_up");
 				}
 				else
 				{
-					enemyanimations.Play("move");
-					stats.enemyspeed = enemybasespeed + 5f;
+					enemyanimations.Play("walk_left");
 				}
 			}
 		}
 	}
 
-	private void UpdateFacingDirection(Vector2 direction)
-	{
-		Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
-
-		float angle = Mathf.RadToDeg(direction.Angle());
-
-		if (angle > -45 && angle <= 45)
-		{
-			sprite2d.FlipH = false;
-		}
-		else if ((angle > 45 && angle <= 135) || (angle > -135 && angle <= -45))
-		{
-			sprite2d.FlipH = true;
-		}
-		else
-		{
-			sprite2d.FlipH = true;
-		}
-	}
 
 	private int areaEnteredResult = 0;
 
@@ -148,7 +135,7 @@ public partial class enemy : CharacterBody2D
 		if (otherArea.IsInGroup("bullet"))
 		{
 			// Play hurt animation
-			enemyanimations.Play("hurt");
+			enemyanimations.Play("idle");
 
 			// Find the player's position
 			Vector2 playerPosition = playercharacter.Position;
@@ -159,17 +146,17 @@ public partial class enemy : CharacterBody2D
 			// Apply knockback
 			Knockback(knockbackDirection);
 
-            // Removes bullet
+			// Removes bullet
 			enemybasehp -= (int)player.ap;
 		}
-		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
+		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || otherArea.IsInGroup("bullet"))
 		{
 			player.Hit = 1;
-			player.hp -= 10;
+			player.hp -= 20;
 		}
 	}
 
-    void Knockback(Vector2 direction)
+	void Knockback(Vector2 direction)
 	{
 		// Adjust the knockback distance based on your needs
 		float knockbackDistance = 20.0f;
@@ -180,11 +167,11 @@ public partial class enemy : CharacterBody2D
 
 	private void enemydead(StringName animName)
 	{
-		if (animName == "death")
+		if (animName == "idle")
 		{
-			score.points += 1;
-			Move.pts +=1;
-			score.newap += 1;
+			score.points += 100;
+			Move.pts += 100;
+			score.newap += 10;
 			// Animation finished, queue-free the enemy
 			QueueFree();
 		}
@@ -192,7 +179,7 @@ public partial class enemy : CharacterBody2D
 
 	private void OnAreaExited(Area2D area)
 	{
-		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
+		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet"))
 		{
 			player.Hit = 0;
 		}
@@ -208,14 +195,14 @@ public partial class enemy : CharacterBody2D
 		isPlayerDead = false;
 	}
 
-    private void increaseenemystat()
-    {
-        enemybasehp += 1;
-		enemybasemaxhp += 0.1;
-    }
+	private void increaseenemystat()
+	{
+		enemybasehp += 1;
+		enemybasemaxhp += 1;
+	}
 
 	private void expireenemy()
-    {
-        QueueFree();
-    }
+	{
+		QueueFree();
+	}
 }
