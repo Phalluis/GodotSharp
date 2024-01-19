@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://8w6hx7nqtejb"]
 
 [ext_resource type="Script" path="res://scenes/player.cs" id="1_drqa8"]
-[ext_resource type="Script" path="res://scenes/Move.cs" id="1_m4wx7"]
+[ext_resource type="Script" path="res://scenes/Move.cs" id="1_e4q7c"]
 [ext_resource type="Texture2D" uid="uid://cjvokklpmimge" path="res://assets/sprites/characters/player.png" id="2_jcsvr"]
 [ext_resource type="PackedScene" uid="uid://b5lh8ksmmqw4u" path="res://scenes/bullet.tscn" id="4_7ed2p"]
 
@@ -259,7 +259,7 @@ corner_detail = 1
 [node name="player" type="CharacterBody2D" groups=["character"]]
 position = Vector2(1264, 655)
 scale = Vector2(2, 2)
-script = ExtResource("1_m4wx7")
+script = ExtResource("1_e4q7c")
 
 [node name="Bullet" parent="." instance=ExtResource("4_7ed2p")]
 position = Vector2(-0.5, -0.5)
