@@ -111,28 +111,24 @@ public partial class aojm : CharacterBody2D
 				if (enemybasehp <= tpthreshold)
 				{
 					playercharacter = GetNode<CharacterBody2D>("../player");
-					float randomAngle = (float)GD.RandRange(0, 2 * Mathf.Pi);
+					float randomAngle = Mathf.DegToRad(GD.RandRange(0, 360));
 
 					// Calculate the new position relative to the player
 					Vector2 offset = new Vector2(1000, 1000).Rotated(randomAngle);
 
 					this.Position = playercharacter.Position + offset;
 
-					enemybasespeed += 25.0f;
+					enemybasespeed += 10.0f;
 					tpthreshold -= 100;
 				}
-				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
-
-				// Update the facing direction based on the angle
 				float angle = Mathf.RadToDeg(direction.Angle());
-
-				// Choose the appropriate animation based on the angle
-				if (angle > -45 && angle <= 45)
+				// Update the facing direction based on the angle
+				if (angle > -45f && angle <= 45)
 				{
 					enemyanimations.Play("walk_right");
 				}
-				else if (angle > 45 && angle <= 135)
+				else if (angle > 45 && angle <= 135f)
 				{
 					enemyanimations.Play("walk_down");
 				}
@@ -140,6 +136,7 @@ public partial class aojm : CharacterBody2D
 				{
 					enemyanimations.Play("walk_up");
 				}
+
 				UpdateFacingDirection(Velocity);
 			}
 		}
@@ -151,18 +148,7 @@ public partial class aojm : CharacterBody2D
 
 		float angle = Mathf.RadToDeg(direction.Angle());
 
-		if (angle > -45 && angle <= 45)
-		{
-			sprite2d.FlipH = false;
-		}
-		else if ((angle > 45 && angle <= 135) || (angle > -135 && angle <= -45))
-		{
-			sprite2d.FlipH = true;
-		}
-		else
-		{
-			sprite2d.FlipH = true;
-		}
+		sprite2d.FlipH = angle > -45 && angle <= 45;
 	}
 
 	private int areaEnteredResult = 0;

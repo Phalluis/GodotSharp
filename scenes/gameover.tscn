@@ -1,8 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://3jiuvyqdvb0k"]
+[gd_scene load_steps=6 format=3 uid="uid://3jiuvyqdvb0k"]
 
 [ext_resource type="Script" path="res://scenes/gameover.cs" id="1_0iks3"]
 [ext_resource type="Texture2D" uid="uid://drg878flp0r75" path="res://assets/ui/1698346663843899.jpg" id="1_llsa6"]
 [ext_resource type="AudioStream" uid="uid://b68bx05v2ybvm" path="res://assets/music/DeathMusic.mp3" id="3_v76mg"]
+
+[sub_resource type="Animation" id="Animation_da5sk"]
+resource_name = "new_animation"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3jheq"]
+_data = {
+"new_animation": SubResource("Animation_da5sk")
+}
 
 [node name="Gameover" type="Control"]
 layout_mode = 3
@@ -15,15 +23,26 @@ script = ExtResource("1_0iks3")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 527.0
+offset_bottom = -56.0
 grow_horizontal = 2
 grow_vertical = 2
+rotation = 6.28319
+scale = Vector2(1.04489, 2.41894)
 texture = ExtResource("1_llsa6")
 expand_mode = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="TextureRect"]
+libraries = {
+"": SubResource("AnimationLibrary_3jheq")
+}
 
 [node name="TryAgainButton" type="Button" parent="."]
 layout_mode = 1

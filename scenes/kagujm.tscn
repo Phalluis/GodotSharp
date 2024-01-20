@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://6id7c0gb6ya5"]
+[gd_scene load_steps=15 format=3 uid="uid://c5al0wyeoa13b"]
 
 [ext_resource type="Script" path="res://scenes/kagujm.cs" id="1_dwkai"]
 [ext_resource type="Texture2D" uid="uid://cb4a175ygdedy" path="res://assets/sprites/kagujm/Kagujm.png" id="2_7g1i3"]
@@ -9,21 +9,6 @@ blend_mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_poyiy"]
 size = Vector2(54, 22.5)
-
-[sub_resource type="Animation" id="Animation_ubup4"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [28]
-}
 
 [sub_resource type="Animation" id="Animation_ybdyw"]
 resource_name = "idle"
@@ -95,7 +80,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_1l6l3"]
 resource_name = "walk_up"
 length = 0.4
-loop_mode = 2
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -111,7 +96,6 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hydj8"]
 _data = {
-"RESET": SubResource("Animation_ubup4"),
 "idle": SubResource("Animation_ybdyw"),
 "walk_down": SubResource("Animation_erb73"),
 "walk_left": SubResource("Animation_7vqch"),
@@ -158,7 +142,7 @@ position = Vector2(-2.52, -2.5)
 texture = ExtResource("2_7g1i3")
 hframes = 4
 vframes = 4
-frame = 8
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 material = SubResource("CanvasItemMaterial_7rqmi")
