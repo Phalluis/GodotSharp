@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://3jiuvyqdvb0k"]
+[gd_scene load_steps=4 format=3 uid="uid://3jiuvyqdvb0k"]
 
 [ext_resource type="Script" path="res://scenes/gameover.cs" id="1_0iks3"]
 [ext_resource type="Texture2D" uid="uid://drg878flp0r75" path="res://assets/ui/1698346663843899.jpg" id="1_llsa6"]
+[ext_resource type="AudioStream" uid="uid://b68bx05v2ybvm" path="res://assets/music/DeathMusic.mp3" id="3_v76mg"]
 
 [node name="Gameover" type="Control"]
 layout_mode = 3
@@ -37,3 +38,6 @@ offset_right = 44.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Try Again?"
+
+[node name="onstart" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_v76mg")

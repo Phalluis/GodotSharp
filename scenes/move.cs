@@ -13,6 +13,7 @@ public partial class Move : CharacterBody2D
 	private float Speed = 200.0f;
 	private enemy enemyScene;
 	private aojm aojmscene;
+	private kagujm kagujmscene;
 	private bullet bulletspawn;
 	private boom boomspawn;
 	private bool isBoomOnCooldown = false;
@@ -170,15 +171,15 @@ public partial class Move : CharacterBody2D
 	{
 		if (death == false)
 		{
-			aojmscene = (aojm)GD.Load<PackedScene>("res://scenes/aojm.tscn").Instantiate();
-			AddSibling(aojmscene);
-
+			kagujmscene = (kagujm)GD.Load<PackedScene>("res://scenes/kagujm.tscn").Instantiate();
+			AddSibling(kagujmscene);
+			RemoveChild(aojmscene);
 			// Calculate a random angle in radians
 			float randomAngleforjm = (float)GD.RandRange(0, 2 * Mathf.Pi);
 			// Calculate the new position relative to the player
 			Vector2 offsetjm = new Vector2(1000, 1000).Rotated(randomAngleforjm);
 
-			aojmscene.Position = sprite2d.Position + offsetjm;
+			kagujmscene.Position = sprite2d.Position + offsetjm;
 		}
 	}
 

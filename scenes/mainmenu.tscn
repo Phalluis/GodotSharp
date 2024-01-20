@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cpbmw7xatr3ok"]
+[gd_scene load_steps=11 format=3 uid="uid://d2cg07n62mjnv"]
 
 [ext_resource type="Script" path="res://scenes/mainmenu.gd" id="1_pyu7v"]
 [ext_resource type="Texture2D" uid="uid://dq5oueblvvc5b" path="res://assets/ui/Gametitle.jpg" id="1_rmqlw"]
@@ -181,6 +181,7 @@ autoplay = "idle"
 modulate = Color(0.663089, 0.0277116, 0.0154071, 1)
 texture_filter = 1
 position = Vector2(133, 486)
+scale = Vector2(3.6957, 1.6471)
 texture = ExtResource("2_1bhk8")
 hframes = 4
 vframes = 4

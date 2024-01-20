@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 public partial class kagujm : CharacterBody2D
 {
-	private double enemybasehp = 1000, enemybasemaxhp = 1000;
+	private double enemybasehp = 2000, enemybasemaxhp = 2000;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private Sprite2D enemycharacter;
-	private float enemybasespeed = 200.0f; // Adjust the speed as needed
+	private float enemybasespeed = 190.0f; // Adjust the speed as needed
 	private float distanceThreshold = 100.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
@@ -48,7 +48,7 @@ public partial class kagujm : CharacterBody2D
 		aojmchase = this.GetNode<AudioStreamPlayer2D>("aojmchase");
 
 		AudioStream audioStream = GD.Load<AudioStream>("res://assets/music/AoJMChase.mp3") as AudioStream;
-		aojmchase.VolumeDb = 20;
+		aojmchase.VolumeDb = 25;
 		aojmchase.Play();
 		aojmchasebool = true;
 		aojmchase.Finished += playagain;
@@ -79,7 +79,7 @@ public partial class kagujm : CharacterBody2D
 
 				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
-				KinematicCollision2D collision = MoveAndCollide(direction * stats.enemyspeed * (float)delta);
+				KinematicCollision2D collision = MoveAndCollide(direction * enemybasespeed * (float)delta);
 
 				// Move the enemy towards the player
 				Position += direction * stats.enemyspeed * (float)delta;
@@ -183,7 +183,7 @@ public partial class kagujm : CharacterBody2D
 		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			player.Hit = 1;
-			player.hp -= 150;
+			player.hp -= 200;
 		}
 	}
 
@@ -214,7 +214,7 @@ public partial class kagujm : CharacterBody2D
 		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet") || area.IsInGroup("boom"))
 		{
 			player.Hit = 0;
-			player.hp -= 10;
+			player.hp -= 20;
 		}
 	}
 
