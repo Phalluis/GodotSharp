@@ -1,9 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cgv7sk7x7o4ir"]
+[gd_scene load_steps=11 format=3 uid="uid://cpbmw7xatr3ok"]
 
 [ext_resource type="Script" path="res://scenes/mainmenu.gd" id="1_pyu7v"]
 [ext_resource type="Texture2D" uid="uid://dq5oueblvvc5b" path="res://assets/ui/Gametitle.jpg" id="1_rmqlw"]
 [ext_resource type="Texture2D" uid="uid://cp8nkqxpovr6r" path="res://assets/sprites/aojm/AoiJMSpritei.png" id="2_1bhk8"]
-[ext_resource type="AudioStream" uid="uid://brr42aifcgiac" path="res://assets/music/MainMenuMusic.mp3" id="4_q57bw"]
+[ext_resource type="AudioStream" uid="uid://bgnwlnc08eoqv" path="res://assets/music/MainMenuMusic.mp3" id="4_q57bw"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_nc6kd"]
 blend_mode = 2

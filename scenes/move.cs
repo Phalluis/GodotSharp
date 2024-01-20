@@ -17,7 +17,7 @@ public partial class Move : CharacterBody2D
 	private boom boomspawn;
 	private bool isBoomOnCooldown = false;
 
-	private Timer timer, slimetimer, aojmtimer, bulletcd;
+	private Timer timer, slimetimer, aojmtimer, kagujmtimer, bulletcd;
 
 
 	// Called when the node enters the scene tree for the first time.
@@ -45,6 +45,12 @@ public partial class Move : CharacterBody2D
 		aojmtimer.WaitTime = 30;
 		aojmtimer.Timeout += aojmspawn;
 		aojmtimer.Start();
+
+		kagujmtimer = new Timer();
+		AddChild(kagujmtimer);
+		kagujmtimer.WaitTime = 60;
+		kagujmtimer.Timeout += kagujmspawn;
+		kagujmtimer.Start();
 
 		hpbar = this.GetNode<ProgressBar>("hpbar");
 		sprite2d = this.GetNode<Sprite2D>("Sprite2D");
@@ -129,7 +135,6 @@ public partial class Move : CharacterBody2D
 	}
 	public void Spawn()
 	{
-		Speed += (float)0.05;
 		if (death == false)
 		{
 			enemyScene = (enemy)GD.Load<PackedScene>("res://scenes/enemy.tscn").Instantiate();
@@ -147,7 +152,6 @@ public partial class Move : CharacterBody2D
 
 	private void aojmspawn()
 	{
-		Speed += (float)0.05;
 		if (death == false)
 		{
 			aojmscene = (aojm)GD.Load<PackedScene>("res://scenes/aojm.tscn").Instantiate();
@@ -162,6 +166,21 @@ public partial class Move : CharacterBody2D
 		}
 	}
 
+	private void kagujmspawn()
+	{
+		if (death == false)
+		{
+			aojmscene = (aojm)GD.Load<PackedScene>("res://scenes/aojm.tscn").Instantiate();
+			AddSibling(aojmscene);
+
+			// Calculate a random angle in radians
+			float randomAngleforjm = (float)GD.RandRange(0, 2 * Mathf.Pi);
+			// Calculate the new position relative to the player
+			Vector2 offsetjm = new Vector2(1000, 1000).Rotated(randomAngleforjm);
+
+			aojmscene.Position = sprite2d.Position + offsetjm;
+		}
+	}
 
 	private void UpdateAnimation()
 	{

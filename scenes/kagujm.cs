@@ -3,14 +3,14 @@ using System;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-public partial class aojm : CharacterBody2D
+public partial class kagujm : CharacterBody2D
 {
-	private double enemybasehp = 500, enemybasemaxhp = 500;
+	private double enemybasehp = 1000, enemybasemaxhp = 1000;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private Sprite2D enemycharacter;
-	private float enemybasespeed = 190.0f; // Adjust the speed as needed
+	private float enemybasespeed = 200.0f; // Adjust the speed as needed
 	private float distanceThreshold = 100.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
@@ -52,6 +52,8 @@ public partial class aojm : CharacterBody2D
 		aojmchase.Play();
 		aojmchasebool = true;
 		aojmchase.Finished += playagain;
+
+		this.Scale = new Vector2(2, 2);
 	}
 
 	private void playagain()

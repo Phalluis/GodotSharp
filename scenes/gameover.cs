@@ -12,15 +12,15 @@ public partial class gameover : Control
 		tryagain.Pressed += again;
 	}
 
-    private void again()
-    {
+	private void again()
+	{
 		GD.Print("Tried Again");
 		player.Revived();
-        GetTree().ChangeSceneToFile("res://scenes/node_2d.tscn");
-    }
+		GetTree().ChangeSceneToFile("res://scenes/node_2d.tscn");
+	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
 	{
 	}
 }

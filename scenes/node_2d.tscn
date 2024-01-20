@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://b6osgoookqspf" path="res://assets/sprites/tilesets/walls/walls.png" id="11_m8t04"]
 [ext_resource type="PackedScene" uid="uid://bmdg1bh23chl7" path="res://scenes/enemy.tscn" id="12_nt1ne"]
 [ext_resource type="Texture2D" uid="uid://b0akr6ecr3vn7" path="res://assets/sprites/tilesets/walls/wooden_door.png" id="12_tkyr6"]
-[ext_resource type="PackedScene" uid="uid://b5lh8ksmmqw4u" path="res://scenes/bullet.tscn" id="12_txypo"]
+[ext_resource type="PackedScene" path="res://scenes/bullet.tscn" id="12_txypo"]
 [ext_resource type="Texture2D" uid="uid://ccmmovlapu0eo" path="res://assets/sprites/tilesets/walls/wooden_door_b.png" id="13_pc8aq"]
 [ext_resource type="PackedScene" uid="uid://b7mjitudxe7m7" path="res://scenes/boom.tscn" id="14_0ily3"]
 [ext_resource type="Script" path="res://scenes/score.cs" id="14_3r4yl"]
