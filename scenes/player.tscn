@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/player.cs" id="1_drqa8"]
 [ext_resource type="Script" path="res://scenes/Move.cs" id="1_e4q7c"]
 [ext_resource type="Texture2D" uid="uid://cjvokklpmimge" path="res://assets/sprites/characters/player.png" id="2_jcsvr"]
-[ext_resource type="PackedScene" path="res://scenes/bullet.tscn" id="4_7ed2p"]
+[ext_resource type="PackedScene" uid="uid://b5lh8ksmmqw4u" path="res://scenes/bullet.tscn" id="4_7ed2p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l6pph"]
 size = Vector2(13, 19)

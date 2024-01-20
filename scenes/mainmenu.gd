@@ -5,7 +5,7 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	audio_stream_player_2d.play()
-	audio_stream_player_2d.volume_db = 15
+	audio_stream_player_2d.volume_db = 10
 	pass
 
 

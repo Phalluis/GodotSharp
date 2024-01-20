@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cxanh834qpvxi"]
+[gd_scene load_steps=16 format=3 uid="uid://bb0vgl3o6j4pk"]
 
 [ext_resource type="Script" path="res://scenes/aojm.cs" id="1_fnik7"]
 [ext_resource type="Texture2D" uid="uid://cp8nkqxpovr6r" path="res://assets/sprites/aojm/AoiJMSpritei.png" id="2_abq4l"]

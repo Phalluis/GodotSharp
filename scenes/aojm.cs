@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 public partial class aojm : CharacterBody2D
 {
-	private double enemybasehp = 500, enemybasemaxhp = 500;
+	private double enemybasehp = 300, enemybasemaxhp = 300, tpthreshold;
 	private ProgressBar hpbar;
 	private AnimationPlayer enemyanimations;
 	private CharacterBody2D playercharacter;
 	private Sprite2D enemycharacter;
-	private float enemybasespeed = 100.0f; // Adjust the speed as needed
+	private float enemybasespeed = 50.0f; // Adjust the speed as needed
 	private float distanceThreshold = 100.0f; // Adjust the distance threshold
 	private static Boolean isPlayerDead = false; // State variable to track player's life status
 	private Color originalColor;
@@ -52,6 +52,8 @@ public partial class aojm : CharacterBody2D
 		aojmchase.Play();
 		aojmchasebool = true;
 		aojmchase.Finished += playagain;
+
+		tpthreshold = enemybasemaxhp;
 	}
 
 	private void playagain()
@@ -106,9 +108,18 @@ public partial class aojm : CharacterBody2D
 			}
 			else
 			{
-				if (distanceToPlayer > distanceThreshold)
+				if (enemybasehp <= tpthreshold)
 				{
-					enemybasespeed += 10000f;
+					playercharacter = GetNode<CharacterBody2D>("../player");
+					float randomAngle = (float)GD.RandRange(0, 2 * Mathf.Pi);
+
+					// Calculate the new position relative to the player
+					Vector2 offset = new Vector2(1000, 1000).Rotated(randomAngle);
+
+					this.Position = playercharacter.Position + offset;
+
+					enemybasespeed += 25.0f;
+					tpthreshold -= 100;
 				}
 				// Calculate the direction from the enemy to the player
 				Vector2 direction = (playercharacter.Position - Position).Normalized();
@@ -129,10 +140,30 @@ public partial class aojm : CharacterBody2D
 				{
 					enemyanimations.Play("walk_up");
 				}
+				UpdateFacingDirection(Velocity);
 			}
 		}
 	}
 
+	private void UpdateFacingDirection(Vector2 direction)
+	{
+		Sprite2D sprite2d = this.GetNode<Sprite2D>("Sprite2D");
+
+		float angle = Mathf.RadToDeg(direction.Angle());
+
+		if (angle > -45 && angle <= 45)
+		{
+			sprite2d.FlipH = false;
+		}
+		else if ((angle > 45 && angle <= 135) || (angle > -135 && angle <= -45))
+		{
+			sprite2d.FlipH = true;
+		}
+		else
+		{
+			sprite2d.FlipH = true;
+		}
+	}
 
 	private int areaEnteredResult = 0;
 
@@ -181,7 +212,7 @@ public partial class aojm : CharacterBody2D
 		else if (otherArea.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character"))
 		{
 			player.Hit = 1;
-			player.hp -= 100;
+			player.hp -= 50;
 		}
 	}
 
@@ -196,7 +227,7 @@ public partial class aojm : CharacterBody2D
 
 	private void enemydead(StringName animName)
 	{
-		if (animName == "idle" && aojmchasebool is false)
+		if (animName == "idle")
 		{
 			score.points += 100;
 			Move.pts += 100;
@@ -212,7 +243,6 @@ public partial class aojm : CharacterBody2D
 		if (area.GetParent() is CharacterBody2D characterBody2D && characterBody2D.IsInGroup("character") || area.IsInGroup("bullet") || area.IsInGroup("boom"))
 		{
 			player.Hit = 0;
-			player.hp -= 10;
 		}
 	}
 

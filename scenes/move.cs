@@ -173,7 +173,7 @@ public partial class Move : CharacterBody2D
 		{
 			kagujmscene = (kagujm)GD.Load<PackedScene>("res://scenes/kagujm.tscn").Instantiate();
 			AddSibling(kagujmscene);
-			RemoveChild(aojmscene);
+			aojmscene.QueueFree();
 			// Calculate a random angle in radians
 			float randomAngleforjm = (float)GD.RandRange(0, 2 * Mathf.Pi);
 			// Calculate the new position relative to the player
